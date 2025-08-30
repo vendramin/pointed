@@ -1,0 +1,2244 @@
+\documentclass[12pt]{amsproc}
+\newcommand{\course}{A crash course on (pointed) Hopf algebras}
+\input{mystuff}
+
+\newcommand{\ydH}{\prescript{H}{H}{\mathcal{YD}}}
+\newcommand{\lmod}[1]{\prescript{}{#1}{\mathcal{M}}}
+\newcommand{\rmod}[1]{\mathcal{M}_{#1}}
+\newcommand{\lcomod}[1]{\prescript{#1}{}{\mathcal{M}}}
+\newcommand{\rcomod}[1]{\mathcal{M}^{#1}}
+
+\tikzset{cong/.style={draw=none,edge node={node [sloped, allow upside down, auto=false]{$\cong$}}},
+         iso/.style={draw=none,every to/.append style={edge node={node [sloped, allow upside down, auto=false]{$\cong$}}}}}
+
+\begin{document}
+
+\begin{abstract}
+These notes provide the material necessary to follow Andruskiewitsch’s course on finite-dimensional pointed Hopf algebras over simple groups.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+In these notes, we work over an arbitrary field $K$. 
+However, in many cases, to simplify the presentation, 
+we will take $K$ as the field $\C$ of complex numbers. 
+
+
+The material covered in these notes is quite standard, and the reader can find further details, additional examples, and complete proofs in standard textbooks on Hopf algebras, including~\cite{zbMATH03747352,zbMATH07679315,zbMATH00482792,zbMATH03309240}
+
+\section{Algebras}
+
+We begin with a brief review of algebras.
+This material is assumed to be known, as it is covered in the Master's-level course on associative algebras.
+
+\index{Algebra}
+An \emph{algebra} (over the field $K$) is a vector space (over $K$)
+with an associative multiplication $A\times A\to A$ such that
+\[
+a(\lambda b+\mu c)=\lambda(ab)+\mu(ac)\quad\text{and}\quad
+(\lambda a+\mu b)c=\lambda(ac)+\mu (bc)
+ \]
+for all $a,b,c\in A$ and $\lambda,\mu\in K$, and
+that contains an element $1_A\in A$ such that
+ \[
+ 1_Aa=a1_A=a
+ \]
+ for all $a\in A$.
+
+\begin{exercise}
+\label{xca:center}
+Prove that a ring $A$ is an algebra over $K$
+if and only if
+there is a ring homomorphism $K\to Z(A)$, where $Z(A)=\{a\in A:ab=ba\text{ for a
+ll $b\in A$}\}$ is the \emph{center}
+of $A$,
+such that $1_K\to 1_A$.
+\end{exercise}
+
+\index{Algebra!commutative}
+An algebra $A$ is \emph{commutative} if $ab=ba$ for all $a,b\in A$.
+\index{Algebra!dimension}
+The \emph{dimension} of an algebra $A$ is the dimension of $A$ as a vector space. 
+
+Examples of algebras 
+occur frequently in nature: 
+\begin{enumerate}
+    \item The field $\R$ is a real algebra and
+        $\C$ is a complex algebra. Moreover, $\C$ is also a real algebra.
+    \item The polynomial ring $\C[X]$ is an algebra over $\C$. 
+    \item $M_n(\C)$ is an algebra over $\C$. 
+\end{enumerate}
+
+\begin{example}
+        Let $n\in\Z_{>0}$. Then $\C[X]/(X^n)$ is a finite-dimensional complex algebra. 
+        This algebra is called the \emph{truncated polynomial algebra}.
+\end{example}
+
+\begin{example}
+        Let $G$ be a finite group. The vector space
+        $\C[G]$ with basis $\{g:g\in G\}$
+        is an algebra with multiplication
+        \[
+        \left(\sum_{g\in G}\lambda_gg\right)\left(\sum_{h\in G}\mu_hh\right)
+        =\sum_{g,h\in G}\lambda_g\mu_h(gh).
+        \]
+        Note that $\dim\C[G]=|G|$ and
+        $\C[G]$ is commutative if and only $G$ is abelian.
+        This is the (complex) \emph{group algebra} of $G$.
+\end{example}
+
+\index{Algebra!homomorphism}
+Let $K$ be a field and $A$ and $B$ be $K$-algebras.
+An algebra \emph{homomorphism} is a ring homomorphism $f\colon A\to B$ that
+is also a $K$-linear map.
+
+\begin{exercise}
+    \label{xca:algebra}
+    Prove that 
+    an \emph{algebra} over $K$ is vector space equipped with linear maps 
+    $m\colon A\otimes A\to A$ and 
+    $u\colon K\to A$ such that the diagrams
+    \[
+    \begin{tikzcd}
+A \otimes A \otimes A \arrow[r, "m \otimes \id"] \arrow[d, "\id \otimes m"'] & A \otimes A \arrow[d, "m"] \\
+A \otimes A \arrow[r, "m"'] & A
+\end{tikzcd}
+\quad\text{and}\quad 
+\begin{tikzcd}
+K \otimes A \arrow[r, "u \otimes \id"] \arrow[dr, "\simeq"'] & A \otimes A \arrow[d, "m"] & A \otimes K \arrow[l, "\id \otimes u"'] \arrow[dl, "\simeq"] \\
+& A &
+\end{tikzcd}
+\]
+are both commutative. The maps $m$ and $u$ are called 
+the \emph{multiplication} and \emph{unit} of the algebra, 
+respectively. 
+\end{exercise}
+
+\begin{exercise}
+    \label{xca:algebra_diagrams}
+    Formulate the definitions of commutativity and algebra homomorphisms using commutative diagrams.
+\end{exercise}
+
+\section{Coalgebras}
+
+Why did we end the previous section with a diagrammatic reformulation of the definition of an algebra?
+Because diagrams offer several advantages. One key benefit is that they allow us to dualize definitions by simply reversing the arrows in the diagram. The dual of an algebra, known as a \emph{coalgebra}, turns out to be of fundamental importance in many areas of mathematics, including the theory of Hopf algebras.
+
+\begin{definition}
+    \label{def:coalgebra}
+    \index{Coalgebra}
+    A \emph{coalgebra} over $K$ is vector space (over $K$) equipped with linear maps $\Delta\colon C\to C\otimes C$ and 
+    $\epsilon\colon C\to K$ such that the diagrams 
+    \[
+\begin{tikzcd}
+C \otimes C \otimes C & C \otimes C \arrow[l, "\Delta \otimes \id"'] \\
+C \otimes C\arrow[u, "\id\otimes\Delta"]   & C\arrow[l, "\Delta"]\arrow[u, "\Delta"']
+\end{tikzcd}
+\quad\text{and}\quad 
+\begin{tikzcd}
+K\otimes C  & C \otimes C \otimes C\arrow[l, "\epsilon \otimes \id"']\arrow[r, "\id\otimes\epsilon"]  & C \otimes C \\
+& C\arrow[lu, "\simeq"]\arrow[u, "\Delta"']\arrow[ru, "\simeq"']\ &
+\end{tikzcd}
+\]
+are both commutative. 
+\end{definition}
+
+\index{Comultiplication}
+\index{Counit}
+The maps $\Delta$ and $\epsilon$ in Definition~\ref{def:coalgebra}
+are called the \emph{comultiplication} and the \emph{counit}, respectively. 
+
+Now we dualize the notions introduced in Exercise~\ref{xca:algebra_diagrams}.
+
+\begin{definition}
+\index{Coalgebra!cocommutative}
+\index{Flip} 
+A coalgebra $C$ is said to be \emph{cocommutative} if 
+the diagram 
+\[
+    \begin{tikzcd}
+C \arrow[r, "\Delta"] \arrow[dr, "\Delta"'] & C \otimes C \arrow[d, "\tau"] \\
+& C \otimes C
+\end{tikzcd}
+\]
+commutes, where $\tau\colon C\otimes C\to C\otimes C$, $x\otimes y\mapsto y\otimes x$, is the \emph{flip map}. 
+\end{definition}
+
+\begin{definition}
+\index{Coalgebra!homomorphism}
+Let $C$ and $D$ be coalgebras. A coalgebra \emph{homomorphism}
+is a linear map $f\colon C\to D$ such that 
+the diagrams 
+\[
+\begin{tikzcd}
+C \arrow[r, "\Delta_C"] \arrow[d, "f"'] & C \otimes C \arrow[d, "f \otimes f"] \\
+D \arrow[r, "\Delta_D"'] & D \otimes D
+\end{tikzcd}
+\quad\text{and}\quad 
+\begin{tikzcd}
+C \arrow[r, "\epsilon"] \arrow[d, "f"'] & K \\
+D \arrow[ur, "\epsilon"'] 
+\end{tikzcd}
+\]
+are both commutative. 
+\end{definition}
+
+We now present several examples of coalgebras.
+The reader is encouraged to verify the details that confirm these structures satisfy the axioms of a coalgebra.
+
+\begin{example}
+    Let $S$ be a non-empty set. Then the complex vector space $\C[S]$ with basis $\{s:s\in S\}$ is a coalgebra
+    with $\Delta(s)=s\otimes s$ and 
+    $\epsilon(s)=1$ for $s\in S$.
+\end{example}
+
+\begin{example}
+    Let $V$ be a complex vector space. Then 
+    $\C\oplus V$ with 
+    \begin{align*}
+        \Delta(1)&=1\otimes 1, && 
+        \epsilon(1)=1, &&
+        \Delta(v)=v\otimes 1+1\otimes v, && 
+        \epsilon(v)=0,
+    \end{align*}
+    for $v\in V$, is a coalgebra. 
+\end{example}
+
+\begin{example}
+    The polynomial ring $\C[X]$ is a coalgebra
+    with 
+    \[
+    \Delta(X^n)=\sum_{k=0}^n\binom{n}{k}X^i\otimes X^{n-i},\quad \epsilon(X^n)=\begin{cases}
+        1 & \text{if $n=0$,}\\
+        0 & \text{otherwise.}
+    \end{cases}
+    \]
+\end{example}
+% \begin{exercise}
+    
+% \end{exercise}
+
+\subsection{Sweedler's notation}
+\index{Sweedler!notation}
+
+Although coalgebras are just as natural as algebras, working with them can sometimes be more challenging due to the need to manipulate long expressions involving tensors. Fortunately, we have Sweedler's notation, which simplifies these computations significantly. The reader should be aware that this notation may appear confusing at first, but it is perfectly valid and extremely useful.
+
+Let $C$ be a coalgebra and $c\in C$. Then $\Delta(c)$ is
+a finite sum of the form 
+\[
+\Delta(c)=\sum_{j=1}^n c_{1j}\otimes c_{2j}\in C\otimes C
+\]
+for elements $c_{ij}\in C$, $i\in\{1,2\}$ 
+and $j\in\{1,\dots,n\}$. We introduce the notation 
+\[
+\Delta(c)=\sum c_{1}\otimes c_{2}.
+\]
+% Thus, for example,  
+% \begin{align*}
+%     \Delta(\id\otimes\Delta)(c)
+%     =\Delta\left(c_{(1)}\otimes\sum\Delta(c_{2})\right)
+%     =\sum c_{(1)}\otimes c_{(2,1)}\otimes c_{(2,2)}
+% \end{align*}
+% Similarly, 
+% \[
+% \Delta(\Delta\otimes\id)(c)=\sum c_{(1,1)}\otimes c_{(1,2)}\otimes c_{2}.
+% \]
+Write 
+% The coasociative means that 
+% \[
+% \Delta(\id\otimes\Delta)(c)=
+% \sum c_{(1)}\otimes c_{(2,1)}\otimes c_{(2,2)}
+% =c_{(1,1)}\otimes c_{(1,2)}\otimes c_{2}
+% =\Delta(\Delta\otimes\id)(c). 
+% \]
+% Thus we write 
+\begin{align*}
+(\id\otimes\Delta)\Delta(c)&=\sum c_1\otimes\Delta(c_2)=\sum c_1\otimes c_{2,1}\otimes c_{2,2},\\
+\shortintertext{and}
+(\Delta\otimes\id)\Delta(c)&=\sum\Delta(c_1)\otimes c_2
+    =\sum c_{1,1}\otimes c_{1,2}\otimes c_{2}. 
+\end{align*}
+% \Delta(\id\otimes\Delta)(c)=\Delta(\Delta\otimes\id)(c)
+% =\sum c_{(1)}\otimes c_{2}\otimes c_{3}. 
+% \]
+Thanks to the coassociativty, we can write 
+\[
+\sum c_{1}\otimes c_{2}\otimes c_{3}
+=\sum c_1\otimes c_{2,1}\otimes c_{2,2}
+=\sum c_{1,1}\otimes c_{1,2}\otimes c_{2}.
+\]
+
+In general, if $\Delta_1=\Delta$ and 
+$\Delta_n=(\Delta\otimes\id^{\otimes(n-1)})\Delta_{n-1}\colon C\to C^{\otimes(n+1)}$ for $n\geq2$, 
+we write 
+\[
+\Delta_n(c)=\sum c_{1}\otimes\cdots\otimes c_{n}.
+\]
+
+Although the above notation may look unusual, it provides a very convenient way to write commutative diagrams. 
+
+\begin{exercise}
+\label{xca:Hopf}
+    Reformulate the definition of a Hopf algebra in Sweedler’s notation.
+\end{exercise}
+
+\begin{exercise}
+\label{xca:Sweedler}
+    Verify the following identities:
+    \begin{align}
+        &\sum\epsilon(c_{2})\otimes \Delta(c_{1})
+        =\Delta(c).\\
+        &\sum\Delta(c_{2})\otimes \epsilon(c_{1})=\Delta(c).\\
+        &\sum c_{1}\otimes\epsilon (c_{3})\otimes c_{2}=\Delta(c)\\
+        &
+        \sum c_{1}\otimes c_{3}\otimes \epsilon (c_{2})=\Delta(c).\\
+        &\sum \epsilon(c_{1})\otimes c_{3}\otimes c_{2}=
+        \sum c_{2}\otimes c_{1}.\\
+        &\sum \epsilon(c_{1})\otimes\epsilon(c_{3})\otimes c_{2}=c.
+    \end{align}
+\end{exercise}
+
+\index{Dual!of a vector space}
+\index{Dual!of a linear map}
+Let $V$ be a vector space. The \emph{dual} of $V$ 
+is the vector space $V^*=\Hom(V,K)$. It comes with 
+an evaluation map
+\[
+V^*\otimes V\to K,\quad 
+(f,v)\mapsto f(v).
+\]
+
+Sometimes, we use the notation $\langle f,v\rangle=f(v)$. 
+
+If $T\colon V\to W$ is a linear map, 
+the \emph{dual} of $T$ is the linear 
+map $T^*\colon W^*\to V^*$, $f\mapsto T^*(f)$, where 
+\[
+\langle T^*(f),v\rangle=T^*(f)(v)=f(T(v))=\langle f,T(v)\rangle.
+\]
+
+\begin{example}
+\index{Dual!of a coalgebra}
+\label{exa:dual_coalgebra}
+    Let $C$ be a coalgebra. The dual 
+    $C^*=\Hom(C,K)$ is an algebra
+    with multiplication 
+    $m(f\otimes g)(c)=\sum f(c_1)g(c_2)$ 
+    and unit $u(f)(c)=f(c)$. A direct calculation 
+    shows that if $C$ is cocommutative, then $C^*$ is commutative. 
+\end{example}
+
+In Example~\ref{exa:dual_coalgebra} we use 
+the canonical 
+embedding $C^*\otimes C^*\to (C\otimes C)^*$ given by 
+\[
+\langle f\otimes g,x\otimes y\rangle
+=\langle f,x\rangle\langle g,y\rangle
+\]
+for $f,g\in C^*$ and $x,y\in C$. 
+
+
+\begin{example}
+\index{Dual!of an algebra}
+\label{exa:dual_algebra}
+    Let $A$ be a finite-dimensional algebra. Then $A^*$ is 
+    a coalgebra with multiplication 
+    $\Delta(f)(a\otimes b)=f(ab)$ and counit 
+    $\epsilon(f)(a)=\epsilon(a)$. A direct calculation shows that 
+    if $A$ is commutative, then $A^*$ is cocommutative. 
+\end{example}
+
+Why we need finite-dimensional algebras in Example~\ref{exa:dual_algebra}? 
+
+\subsection{Group-like and primitive elements}
+
+\begin{definition}
+    \index{Group-like element}
+    Let $C$ be a coalgebra. An element $c\in C$ is 
+    a \emph{group-like} if $\epsilon(c)=1$ and 
+    $\Delta(c)=c\otimes c$.  
+\end{definition}
+
+The set of group-like elements of a coalgebra $C$ 
+is written $G(C)$. 
+
+\begin{proposition}
+    Group-like elements are linearly independent. 
+\end{proposition}
+
+\begin{proof}
+    Let $C$ be a coalgebra such that $G(C)$ is linearly 
+    dependent. Let $\{c,c_1,\dots,c_n\}$ be a linearly dependent set of minimal size $n+1$. Without loss of generality, 
+    we may assume that 
+    $\{c_1,\dots,c_n\}$ is linearly independent and 
+    $c\in\operatorname{span}_K\{c_1,\dots,c_n\}$. Thus 
+    \[
+    c=\lambda_1c_1+\cdots+\lambda_nc_n
+    \]
+    for $\lambda_1,\dots,\lambda_n\in K$, all differnt from
+    zero. 
+    Applying $\Delta$, 
+    \[
+    \sum_{i=1}^{n}\sum_{j=1}^{n}\lambda_i\lambda_jc_i\otimes c_j=c\otimes c=\Delta(c)
+    =\sum_{i=1}^{n}\lambda_i\Delta(c_i)
+    =\sum_{i=1}^{n}\lambda_ic_i\otimes c_i.
+    \]
+    Since $\{c_i\otimes c_j:1\leq i,j\leq n\}$ is linearly
+    independent, comparing coefficients, we 
+    get that $n=1$ and hence $c=\lambda_1c_1$. Then 
+    $1=\epsilon(c)=\lambda_1\epsilon(c_1)=\lambda_1$ 
+    and therefore $c=c_1$, a contradiction. 
+\end{proof}
+
+\begin{example}
+    Let $G$ be a finite group and $C=K[G]$. Then 
+    $G(C)=G$.  
+\end{example}
+
+\begin{definition}
+\framebox{Primitive}    
+\end{definition}
+
+\begin{example}
+    Let $\mathfrak{g}$ be a Lie algebra 
+    and $C=\mathcal{U}(\mathfrak{g})$. If $\operatorname{char}(K)=0$, then $P(C)=\mathfrak{g}$. Otherwise, if 
+    $\operatorname{char}(K)=p>0$, then 
+    $P(C)=\operatorname{span}_K\{x^{p^k}:k\geq0\}$.
+\end{example}
+
+\subsection{Modules}
+
+We now give the usual definition of modules over
+algebras but using commutative diagrams.
+
+\begin{definition}
+    \index{Module}
+    Let $A$ be an algebra. A \emph{left $A$-module} is a vector 
+    space $M$ together with a linear map 
+    $\gamma\colon A\otimes M\to M$ such that
+    the diagrams 
+    \[
+    \begin{tikzcd}
+	A\otimes A\otimes M & {A\otimes M} \\
+	{A\otimes M} & {M}
+	\arrow["m\otimes\id", from=1-1, to=1-2]
+	\arrow["\id\otimes\gamma"', from=1-1, to=2-1]
+	\arrow["\gamma", from=1-2, to=2-2]
+	\arrow["\gamma"', from=2-1, to=2-2]
+    \end{tikzcd}
+    \quad\text{and}\quad 
+    \begin{tikzcd}
+	K\otimes M & {A\otimes M} \\
+	&{M}
+	\arrow["u\otimes\id", from=1-1, to=1-2]
+	\arrow["\gamma", from=1-2, to=2-2]
+	\arrow["\simeq"', from=1-1, to=2-2]
+    \end{tikzcd}
+    \]
+    both commute.
+\end{definition}
+
+\begin{definition}
+    \index{Module!homomorphism}
+    Let $M$ and $N$ be left $A$-modules. 
+    A linear map $f\colon M\to N$ is a left module \emph{homomorphism}
+    if $f(a\cdot m)=a\cdot f(m)$ for all $a\in A$ and $m\in M$. 
+\end{definition}
+
+The category of left $A$-modules is denoted $\lmod{A}$. 
+
+Right modules and right module homomorphisms are defined similarly. We leave it to the reader to write the definitions explicitly. The category of right $A$-modules is denoted $\rmod{A}$. 
+
+
+\subsection{Comodules}
+
+A comodule over a coalgebra is the dual 
+concept of a module over an algebra. Instead of an algebra acting on a vector space, a coalgebra coacts on it. 
+
+\begin{definition}
+\label{def:comodule}
+\index{Comodule}
+    Let $C$ be a coalgebra. A \emph{left $C$-comodule} 
+    is a vector space $M$ together with 
+    a linear map $\delta\colon M\to C\otimes M$
+    such that the diagrams 
+    \[
+    \begin{tikzcd}
+	M & {C\otimes M} \\
+	{C\otimes M} & {C\otimes C\otimes M}
+	\arrow["\delta", from=1-1, to=1-2]
+	\arrow["\delta"', from=1-1, to=2-1]
+	\arrow["\Delta\otimes\id", from=1-2, to=2-2]
+	\arrow["\id\otimes\delta"', from=2-1, to=2-2]
+    \end{tikzcd}
+    \quad\text{and}\quad 
+    \begin{tikzcd}
+	M & {C\otimes M} \\
+	&{K\otimes M}
+	\arrow["\delta", from=1-1, to=1-2]
+	\arrow["\epsilon\otimes\id", from=1-2, to=2-2]
+	\arrow["\simeq"', from=1-1, to=2-2]
+    \end{tikzcd}
+    \]
+    commute. In Sweedler's notation, 
+    \begin{align*}
+        \delta(m)&=\sum m_{-1}\otimes m_0\in C\otimes M.
+%        (\delta\otimes\id)\delta(m)&=m_{-2}\otimes m_{-1}\otimes m_0\in C\otimes C\otimes M.
+    \end{align*}
+    We write  
+    \begin{align*}
+        \sum m_{-2}\otimes m_{-1}\otimes m_{0}&
+        =\sum m_{-1}\otimes m_{0,-1}\otimes m_{0,0}
+        =\sum m_{-1,1}\otimes m_{-1,2}\otimes m_0
+    \end{align*}
+    for all $m\in M$. Note that 
+    the second diagram says that $\sum\epsilon(m_{-1})m_0=m$ for all 
+    $m\in M$. 
+\end{definition}
+
+Similarly, a \emph{right $C$-comodule} is defined
+by a linear map $\delta\colon M\to M\otimes C$ such that
+the diagrams 
+    \[
+    \begin{tikzcd}
+	M & {M\otimes C} \\
+	{M\otimes C} & {M\otimes C\otimes C}
+	\arrow["\delta", from=1-1, to=1-2]
+	\arrow["\delta"', from=1-1, to=2-1]
+	\arrow["\id\otimes\Delta", from=1-2, to=2-2]
+	\arrow["\delta\otimes\id"', from=2-1, to=2-2]
+    \end{tikzcd}
+    \quad\text{and}\quad 
+    \begin{tikzcd}
+	M & {M\otimes K} \\
+	&{M\otimes C}
+	\arrow["\delta", from=1-1, to=1-2]
+	\arrow["\id\otimes\epsilon", from=1-2, to=2-2]
+	\arrow["\simeq"', from=1-1, to=2-2]
+\end{tikzcd}
+    \]
+commute. In Sweedler's notation, 
+\[
+\delta(m)=\sum m_0\otimes m_1\in M\otimes C.
+\]
+We write 
+    \begin{align*}
+        \sum m_{-1}\otimes m_0\otimes m_1&=
+        \sum m_0\otimes m_{1,1}\otimes m_{1,2}
+        =\sum m_{0,0}\otimes m_{0,1}\otimes m_1
+    \end{align*}
+    for all $m\in M$. The second diagrams says that 
+    $\sum m_0\epsilon(m_1)=m$ for all $m\in M$. 
+    
+Note that Sweedler's notation for left and right comodules is compatible with the notation we introduced before for coalgebras. This is fantastic!
+
+\begin{example}
+    Any coalgebra is a comodule with coaction $\Delta$. 
+\end{example}
+
+%How do comodules over group algebras look like?  
+
+\begin{example}
+    Let $G$ be a finite group and $C=K[G]$ with 
+    the coalgebra structure given by $\Delta(g)=g\otimes g$ and 
+    $\epsilon(g)=1$ for all $g\in G$. Let $M$ be a left $C$-comodule
+\end{example}
+    
+\begin{exercise}
+\label{xca:sum_comodules}
+Prove that the sum of comodules is a comodule.     
+\end{exercise}
+
+\begin{exercise}
+    \label{xca:1.6.4a}
+    Let $C$ be a coalgebra. Prove that 
+    if $M$ is a right $C$-comodule, then 
+    $M$ is a left $C^*$-module with
+    \[
+    f\cdot m=\sum f(m_1)m_0.
+    \]
+\end{exercise}
+
+\begin{exercise}
+    \label{xca:1.6.4b}
+    Let $A$ be a finite-dimensional algebra. Prove that 
+    if $M$ is a left $A$-module, then 
+    $M$ is a right $A^*$-module. 
+\end{exercise}
+
+% Let $m\in M$ and $\{m_1,\dots,m_k\}$ be a basis of $A\cdot m$. 
+% Thus $a\cdot m=\sum_{i=1}^kf_i(a)m_i$
+% then $\rho(m)=\sum_{i=1}^n m_i\otimes f_i$
+
+\subsection{The fundamental theorem of coalgebras}
+
+\begin{definition}
+    \index{Subcoalgebra}
+    Let $C$ be a coalgebra. A \emph{subcoalgebra} is
+    a subspace $D$ of $C$ such that $\Delta(D)\subseteq D\otimes D$. 
+\end{definition}
+
+Note that the definition of a subcoalgebra does not involve the counit. Why?
+
+The reader should verify that a subcoalgebra is indeed a coalgebra with the appropriately restricted maps. Moreover, the inclusion map of a subcoalgebra into a coalgebra is a coalgebra homomorphism.
+
+\begin{theorem}[fundamental theorem of coalgebras]
+\index{Fundamental theorem of coalgebras}
+\label{thm:fundamental}
+    Let $C$ be a coalgebra.
+    \begin{enumerate}
+        \item Let $M$ a right $C$-comodule and 
+    $m\in M$. Then there exists a finite-dimensional
+    subcomodule $N$ of $M$ such that $m\in N$. 
+        \item Let $c\in C$. Then there exists a finite-dimensional subcoalgebra $D$ of
+        $C$ such that $c\in D$. 
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\
+    \begin{enumerate}
+            \item Let $\{c_i:i\in I\}$ be a basis of $C$. Let $\rho\colon M\to M\otimes C$, $m\mapsto\sum w_i\otimes c_i$, where all but finitely many $w_i$ are
+            zero. For each $i$, write 
+            \[
+            \Delta(c_i)=\sum\alpha_{ijk}c_j\otimes c_j
+            \]
+            where $\lambda_{ijk}\in K$. Then
+            \begin{align*}
+                \sum\rho(w_i)\otimes c_i
+                =(\rho\otimes\id)\rho(m)
+                =(\id\otimes\Delta)\rho(m)
+                =\sum w_i\otimes\alpha_{ijk}c_j\otimes c_k.
+            \end{align*}
+            Comparing the coefficient of $c_k$, we obtain that
+            \[
+            \rho(w_k)=\sum w_i\otimes\alpha_{ijk}c_j.
+            \]
+            Let $N=\operatorname{span}_K\{m,w_i\}\subseteq M$. 
+            Then $N$ is a subcomodule containing $m$. 
+        \item Apply the first part to the $C$-comodule 
+        $M=C$ with $\rho=\Delta$. Then there exists 
+        a finite-dimensional subspace $V$ of $C$ containing $c$. 
+        Moreover, $\Delta(V)\subseteq V\otimes C$. Let $\{v_1,\dots,v_n\}$ be a basis of $V$. For each $j$, write
+        \[
+        \Delta(v_j)=\sum v_i\otimes c_{ij}. 
+        \]
+        Then $\Delta(c_{ij})=\sum_kc_{ik}\otimes c_{kj}$. Let 
+        $D=\operatorname{span}_K\{v_1,\dots,v_n,c_{ij}\}$. Then the claim follows since 
+        $\Delta(D)\subseteq D\otimes D$ and $V\subseteq D$.\qedhere 
+    \end{enumerate}
+\end{proof}
+
+Theorem~\ref{thm:fundamental} immediately implies that every simple coalgebra is finite-dimensional. Similarly, every simple comodule is finite-dimensional.
+
+\begin{exercise}
+    Prove that Theorem~\ref{thm:fundamental} extends to arbitrary finite sums of elements.
+\end{exercise}
+
+% \begin{theorem}
+% \index{Fundamental theorem of coalgebras}
+%     Let $C$ be a coalgebra and $c\in C$. Then $c$ is contained
+%     in a finite-dimensional subcoalgebra of $C$. 
+% \end{theorem}
+
+% Cartier 2.6.1
+
+\section{Bialgebras and Hopf algebras}
+
+\begin{definition}
+    \index{Bialgebra}
+    A \emph{bialgebra} is a vector space $B$ that is both an algebra and a coalgebra such that the comultiplication and the counit are algebra homomorphisms. 
+\end{definition}
+
+\begin{exercise}
+\label{xca:bialgebra}
+    Let $B$ that is both an algebra and a coalgebra. Prove that 
+    $B$ is a bialgebra if and only if 
+    multiplication and the unit are coalgebra homomorphisms. 
+\end{exercise}
+
+\begin{definition}
+\index{Bialgebra!homomorphism}
+A bialgebra \emph{homomorphism} is a map that is both an algebra and
+a coalgebra homomorphism. 
+\end{definition} 
+
+\begin{definition}
+    \index{Hopf algebra}
+    \index{Antipode}
+    A \emph{Hopf algebra} is a bialgebra $H$ 
+    together with a linear map 
+    \[
+    S\colon H\to H,
+    \]
+    called the \emph{antipode}, such that 
+    the diagram 
+\begin{equation}
+\label{eq:antipode}
+\begin{tikzcd}
+	& {H\otimes H} && {H\otimes H} \\
+	H && K && H \\
+	& {H\otimes H} && {H\otimes H}
+	\arrow["{S\otimes\id}", from=1-2, to=1-4]
+	\arrow["m", from=1-4, to=2-5]
+	\arrow["\Delta", from=2-1, to=1-2]
+	\arrow["\epsilon", from=2-1, to=2-3]
+	\arrow["\Delta"', from=2-1, to=3-2]
+	\arrow["u", from=2-3, to=2-5]
+	\arrow["{\id\otimes S}", from=3-2, to=3-4]
+	\arrow["m"', from=3-4, to=2-5]
+\end{tikzcd}
+\end{equation}
+    commutes. 
+\end{definition}
+
+Using Sweedler’s notation, the commutativity of the diagram~\eqref{eq:antipode} can be expressed as
+\[
+S(h_{1})h_{2}=h_{1}S(h_{2})=\epsilon(h)1
+\]
+for all $h\in H$. 
+
+A routine argument shows the uniqueness of the antipode, when it exists.
+
+\begin{exercise}
+    \label{xca:convolution}
+    Let $A$ be an algebra and $C$ a coalgebra. 
+    Prove that the set 
+    of linear homomorphism $\Hom(C,A)$ together with
+    the \emph{convolution product}
+    \[
+    (f*g)(x) = \sum f(x_1)g(x_2)
+    \]
+    is an algebra. 
+\end{exercise}
+
+\begin{exercise}
+    \label{xca:antipode}
+    Let $H$ be a Hopf algebra. Prove that
+    the antipode is the inverse of 
+    $\id$ with respect to the convolution 
+    product of $\Hom(H,H)$ of Exercise~\ref{xca:convolution}.
+\end{exercise}
+
+\begin{definition}
+\index{Hopf algebra!homomorphism}
+A Hopf algebra \emph{homomorphism} 
+is a bialgebra homomorphism that commutes with the antipode. 
+\end{definition}
+% Sweedler 4.0.1
+
+\begin{theorem}
+\label{thm:antipode}
+    Let $H$ be a Hopf algebra. Then
+    \begin{align*}
+        S(xy)=S(y)S(x), && S(1)=1, &&
+        \Delta(S(x))=S(x_{2})\otimes S(x_{1}),
+        && \epsilon(S(x))=\epsilon(x)
+    \end{align*}
+    for all $x\in H$. 
+\end{theorem}
+
+\begin{exercise}
+    Prove Theorem~\ref{thm:antipode}.
+\end{exercise}
+
+Theorem~\ref{thm:antipode} states that the antipode is both an anti-algebra and an anti-coalgebra homomorphism.
+
+\begin{exercise}
+    Let $H$ be a commutative or cocommutative Hopf algebra. 
+    Prove that $S^2=\id$. 
+\end{exercise}
+
+% cartier 3.1.1
+
+%https://en.wikipedia.org/wiki/Hopf_algebra
+
+\begin{example}[group algebra]
+\index{Group algebra}
+    Let $G$ be a finite group. Then $\C[G]$ with 
+    $\Delta(g) = g\otimes g$,  
+    $\epsilon(g)=1$ and $S(g)=g^{-1}$ for all $g\in G$ 
+    is a Hopf algebra. Note that $\C[G]$ is cocommutative and 
+    $\C[G]$ is commutative if and only if $G$ is abelian. 
+\end{example}
+
+% \begin{example}
+%     Let $G$ be a finite group. Then the set 
+%     $\C^G$ of maps $G\to\C$ is a Hopf algebra
+%     with point-wise addition and multiplication and 
+%     $\Delta(f)(x,y)=f(xy)$, $\epsilon(f)=f(1)$ and 
+%     $S(f)(x)=f(x^{-1})$ 
+% \end{example}
+
+\begin{example}[trigonometric Hopf algebra]
+    % Let $A$ be a commutative algebra. Then $C(A)=\{(x,y):x^2+y^2=1\}$ is a group with 
+    % \[
+    % (a,b)(c,d)=(ac-bd,ad+bc).
+    % \]
+    The algebra $H$ with generators $s,c$ and 
+    relations $c^2+s^2-1$ is a Hopf algebra with 
+    \begin{align*}
+    \Delta(c)=c\otimes c-s\otimes s,
+    && 
+    \Delta(s)=c\otimes s+s\otimes c,
+    &&
+    \epsilon(c)=1,
+    &&
+    \epsilon(s)=0,
+    &&
+    S(c)=c,
+    &&
+    S(s)=-s.    
+    \end{align*}
+\end{example}
+
+\begin{example}[tensor algebra]
+\index{Tensor algebra}
+    Let $V$ be a vector space...
+\end{example}
+
+\begin{example}[universal enveloping algebra]
+\index{Universal enveloping algebra}
+    Let $\mathfrak{g}$ be a Lie algebra. The \emph{enveloping algebra} $H=\mathcal{U}(\mathfrak{g})$ is a Hopf algebra with
+    \[
+    \Delta(x)=x\otimes 1+1\otimes x,\quad 
+    \epsilon(x)=0,\quad 
+    S(x)=-x
+    \]
+    for all $x\in\mathfrak{g}$. 
+\end{example}
+
+\begin{exercise}
+\label{xca:primitives}
+    Let $H$ be a Hopf algebra. Let $x\in H$ be such that 
+    $\Delta(x)=x\otimes 1+1\otimes x$. Prove that 
+    $\epsilon(x)=0$ and $S(x)=-x$. 
+\end{exercise}
+
+% Apply 1\otimes\epsilon to \Delta(x). 
+% Then use the definition of $S$. 
+
+The following example is the smallest example of a Hopf algebra that is both non-commutative and non-cocommutative.
+
+\begin{example}[Sweedler]
+\index{Sweedler!Hopf algebra}
+Assume that $\operatorname{char}K\ne2$. Let $H_4$ be
+the algebra with generators $1,g,x,gx$ and relations
+\[
+g^2=1,\quad x^2=0,\quad xg=-gx.
+\]
+Then $H_4$ is a Hopf algebra with
+\begin{align*}
+&\Delta(g)=g\otimes g,
+&&\Delta(x)=x\otimes 1+1\otimes x,
+&&\epsilon(g)=1,
+&&\epsilon(x)=0,
+&&S(g)=g^{-1},
+&&S(x)=-gx.    
+\end{align*}
+Note that $H_4$ is non-commutative and non-cocommutative. Moreover, 
+$S$ has order four. 
+\end{example}
+
+\section{Actions and coactions on (co)algebras}
+
+\begin{definition}
+\label{def:module_algebra}
+\index{Module!algebra}
+Let $H$ be a Hopf algebra. A left \emph{$H$-module-algebra} is an algebra
+$A$ with a left $H$-module structure such that
+\[
+h\rightarrow(ab)=\sum (h_{1}\rightarrow a)(h_{2}\rightarrow b)
+\quad \text{and}\quad 
+h\rightarrow1=\epsilon(h)1
+\]
+for all $h\in H$ and $a,b\in A$. 
+\end{definition}
+
+Similarly, one defines right $H$-module-algebras. It is an
+algebra with a right $H$-module structure such that 
+\[
+(ab)\leftarrow
+h=\sum (a\leftarrow h_{1})(b\leftarrow h_{2})
+\quad\text{and}\quad 1\leftarrow h=\epsilon(h)1 
+\]
+for
+all $h\in H$ and $a,b\in A$. 
+
+\begin{exercise}
+\label{xca:dualH_on_H}
+Let $H$ be a Hopf algebra.  Prove that $H^*$ is an left $H$-module-algebra
+with  $\langle h\rightharpoonup f,x\rangle=\langle f,xh\rangle$ for all $f\in
+H^*$ and $h,x\in H$.  
+\end{exercise}
+
+Similarly, $H^*$ is a right $H$-module-algebra
+with $\langle f\leftharpoonup h,x\rangle=\langle f,xh\rangle$.
+
+\begin{exercise}
+\label{xca:adjoint}
+\index{Adjoint!action}
+Let $H$ be a Hopf algebra. Prove that $H$ is a left $H$-module algebra with 
+the \emph{left
+adjoint action}, that is 
+$a\rightarrow x=\sum a_{1}xS(a_{2})$
+for $x,a\in H$.
+\end{exercise}
+
+Similarly, the \emph{right
+adjoint action} of $H$ is given by 
+$x\leftarrow a=\sum S(a_{1})xa_{2}$ for $x,a\in H$.  
+
+\begin{exercise}
+    How do the adjoint actions look for 
+    group algebras $K[G]$ and enveloping algebras 
+    $\mathcal{U}(\mathfrak{g})$ of Lie algebras? 
+\end{exercise}
+
+% \begin{example}
+% Let $G$ be a finite group and $H=K[G]$. In this case, 
+% the left adjoint action is $a\rightarrow x=axa^{-1}$.
+% \end{example} 
+
+% \begin{example}
+% Let $\mathfrak{g}$ be a Lie algebra and $\mathcal{U}(\mathfrak{g})$. The left adjoint action
+% is 
+% $a\rightarrow x=ax-xa$. 
+% \end{example}
+
+The following exercise introduces the 
+\emph{left smash product}. 
+
+\begin{exercise}
+\label{xca:left_smash}
+\index{Smash!product}
+Let $H$ be a bialgebra and $(A,\rightarrow)$ be an left $H$-module-algebra.
+Prove that there exists an algebra structure on $A\otimes H$ given by
+\[
+(a\otimes h)(b\otimes g)=\sum a(h_{1}\rightarrow b)\otimes h_{2}g
+\]
+and unit $1\otimes1$. Moreover, 
+the maps $A\to A\otimes H$, $a\mapsto a\otimes1$,
+and $H\to A\otimes H$, $h\mapsto 1\otimes h$ 
+are algebra embeddings.
+\end{exercise}
+
+If $A$ is a right $H$-module-algebra, then 
+the \emph{right smash product} is the algebra structure 
+on $H\otimes A$ given by 
+\[
+(h\otimes a)(g\otimes b)=\sum hg_{1}\otimes(a\leftarrow g_{2})b
+\]
+and unit $1\otimes1$.
+
+% \begin{exercise}
+% \index{smash product!right}
+% Let $H$ be a Hopf algebra and $(A,\leftarrow)$ be an right $H$-module-algebra.
+% Prove that there exists an algebra structure on $H\otimes A$ given by 
+% \[
+% (h\otimes a)(g\otimes b)=hg_{1}\otimes(a\leftarrow g_{2})b
+% \]
+% and unit $1\otimes1$. This algebra is called the \emph{right
+% smash product} of $H$ and $A$. 
+% \end{exercise}
+
+%\section{Actions on coalgebras}
+
+\begin{definition}
+\label{def:module_coalgebra}
+\index{Module!coalgebra}
+Let $H$ be a Hopf algebra. A left \emph{$H$-module-coalgebra}
+is a coalgebra $C$ with a left $H$-module structure such that 
+\[
+\sum (h\rightarrow c)_{1}\otimes(h\rightarrow c)_{2} =\sum (h_{1}\rightarrow c_{1})(h_{2}\rightarrow c_{2})
+\quad\text{and}\quad 
+\epsilon(h\rightarrow c)  =\epsilon(h)\epsilon(c)
+\]
+for all $h\in H$ and $c\in C$. 
+\end{definition}
+
+Similarly, a right $H$-module-coalgebra 
+is a coalgebra $C$ with a right
+$H$-module structure such that 
+\[
+\sum (c\leftarrow h)_{1}\otimes(c\leftarrow h)_{2} =\sum (c_{1}\leftarrow h_{1})(c_{2}\leftarrow h_{2})
+\quad\text{and}\quad 
+\epsilon(c\leftarrow h)  =\epsilon(h)\epsilon(c)
+\]
+for all $h\in H$ and $c\in C$.
+
+\begin{exercise}
+\index{Coadjoint!action}
+Let $H$ be a finite-dimensional Hopf algebra and 
+\[
+(a\rightharpoonup f)(b)=f(ba)
+\quad\text{and}\quad 
+(f\leftharpoonup a)(b)=f(ab)
+\]
+for all $a,b\in H$ and $f\in H^{*}$. The \emph{left coadjoint action}
+of $H$ on $H^{*}$ is 
+\[
+h\triangleright f=\sum (h_{1}\rightharpoonup f\leftharpoonup S^{-1}h_{2})=\sum f(S^{-1}h_{2}?h_1),
+\]
+where $f(?)$ means the function $x\mapsto f(x)$. Prove that
+$(H^*)^\mathrm{cop}$ is a left $H$-module-coalgebra via the left coadjoint
+action. 
+\end{exercise}
+
+Similarly,  a right $(H^*)^\mathrm{cop}$-module-coalgebra is given by the \emph{right coadjoint action} of $H$ on $H^{*}$, that is
+\[
+f\triangleleft h=\sum (S^{-1}h_{1}\rightharpoonup f\leftharpoonup h_{2})=\sum f(h_2?S^{-1}h_{1}).
+\]
+
+\begin{example}
+Let $G$ be a finite group and $H=K[G]$. Let $\{e_g:g\in G\}$ be a basis of $H$. Then 
+$y\rightharpoonup e_{x}=e_{xy^{-1}}$ (resp. $e_{x}\leftharpoonup
+y=e_{y^{-1}x}$) defines a left (resp. right) $H$-module structure over $H^{*}$. In this case, 
+the left coadjoint action of $H$ over $H^{*}$ is 
+\[
+y\triangleright e_{x}=y\rightharpoonup e_{x}\leftharpoonup y^{-1}=e_{xyx^{-1}}.
+\]
+\end{example}
+
+\begin{exercise}
+\index{Regular action}
+Let $H$ be a Hopf algebra. Prove that 
+Prove that $H$ is a left $H$-module-coalgebra with 
+the left \emph{regular action} of $H$ on itself:
+$h\rightarrow g=gh$ for all
+$h,g\in H$. 
+\end{exercise}
+
+%\section{Coactions on algebras}
+% Recall that a \emph{$H$-comodule} is a pair $(V,\delta)$,
+% where $V$ is a vector space and $\delta:V\to H\otimes V$ is a linear
+% map such that 
+% \begin{align*}
+% (\id\otimes\delta)\delta & =(\Delta\otimes\id)\delta,\\
+% (\epsilon\otimes\id)\delta & =\id.
+% \end{align*}
+% We write $\delta(v)=v_{-1}\otimes v_{0}$. Similarly, a \emph{right
+% $H$-comodule} is a pair $(V,\delta)$, where $\delta:V\to V\otimes H$
+% is a linear map such that 
+% \begin{align*}
+% (\id\otimes\Delta)\delta & =(\delta\otimes\id)\delta,\\
+% (\id\otimes\epsilon)\delta & =\id.
+% \end{align*}
+% In this case we write $\delta(v)=v_{0}\otimes v_{1}$.
+
+\begin{definition}
+\index{Comodule!algebra}
+Let $H$ be a Hopf algebra. An algebra $A$ is a said to be a left
+\emph{$H$-comodule-algebra} if $A$ is a left $H$-comodule such that 
+\begin{align*}
+\sum (1_A)_{-1}\otimes (1_A)_0 =\sum 1_{H}\otimes1_{A},
+\quad\text{and}\quad 
+\sum (ab)_{-1}\otimes (ab)_0 =\sum a_{-1}b_{-1}\otimes a_{0}b_{0}
+\end{align*}
+for all $a,b\in A$. 
+\end{definition}
+
+%\section{Coactions on coalgebras}
+
+\begin{definition}
+\index{Comodule!coalgebra}
+Let $H$ be a Hopf algebra. A coalgebra $C$ is said to be a left
+\emph{$H$-comodule-coalgebra} if $C$ 
+is a left $H$-comodule such that 
+\begin{align*}
+\sum c_{-1}\epsilon(c_{0}) & =\epsilon(c)1
+\quad\text{and}\quad 
+\sum (c_{1})_{-1}(c_{2})_{-1}\otimes(c_{1})_{0}\otimes(c_{2})_{0}  =\sum c_{-1}\otimes(c_{0})_{1}\otimes(c_{0})_{2}
+\end{align*}
+for all $c\in C$.
+\end{definition}
+
+\begin{exercise}
+\index{Coadjoint!coaction}
+Prove that a Hopf algebra 
+$H$ is a left $H$-comodule-coalgebra via the left \emph{coadjoint coaction}
+of $H$ on $H$, that is $\mathrm{coadj}(h)=\sum h_{1}S(h_{3})\otimes h_{2}$ for $h\in H$. 
+\end{exercise}
+
+\begin{exercise}
+Let $H$ be a Hopf algebra, $C$ a coalgebra and $f\in\Hom(C,H)$
+be a coalgebra map with convolution inverse $g$. Prove that $C$ 
+is a left $H$-comodule coalgebra with
+$\delta\colon H\to H\otimes C$, 
+$\delta(c)=\sum f(c_{1})g(c_{3})\otimes c_{2}$. 
+\end{exercise}
+
+The following exercise introduces the 
+\emph{left smash coproduct}.
+
+\begin{exercise}
+\label{xca:smash_coleft}
+\index{Smash!coproduct}
+Let $H$ be a Hopf algebra, and $(C,\delta)$ be a left $H$-comodule
+coalgebra. Prove that $C\otimes H$ is a coalgebra with coproduct
+\[
+\Delta(c\otimes h)=\sum \left(c_{1}\otimes c_{2,-1}h_{1}\right)\otimes\left(c_{2,0}\otimes h_{2}\right),
+\]
+and counit $\epsilon(c\times h)=\epsilon(c)\epsilon(h)$ for
+all $c\in C$ and $h\in H$.  Moreover, the maps $C\otimes H\to C$,
+$c\otimes h\mapsto c\epsilon(h)$, and $C\otimes H\to H$, $c\otimes h\mapsto
+\epsilon(c)h$, are coalgebra surjections.
+\end{exercise}
+
+Assume that $C$ is a right $H$-comodule coalgebra. The \emph{right
+smash coproduct} is then defined by 
+\[
+\Delta(h\otimes c)=\sum h_{1}\otimes c_{1,0}\otimes h_{2}c_{1,1}\otimes c_{2}
+\]
+for all $h\in H$ and $c\in C$.
+
+\section{Pointed Hopf algebras}
+
+
+\begin{definition}
+    \index{Coalgebra!simple}
+    A coalgebra $C$ is said to be \emph{simple} if it has no
+    non-zero proper subcoalgebras. 
+\end{definition}
+
+\begin{definition}
+    \index{Coalgebra!pointed}
+    A coalgebra $C$ is said to be \emph{pointed} if all its 
+    simple subcoalgebras are one-dimensional. 
+\end{definition}
+
+\begin{exercise}
+\label{xca:Cdual_on_C}
+    Let $C$ be a coalgebra. Prove that 
+    $C^*$ acts on $C$ by
+    \[
+    f\rightharpoonup c=\sum f(c_2)c_1.
+    \]
+    Moreover, $g(f\rightharpoonup c)=(gf)(c)$ for 
+    all $f,g\in C^*$ and $c\in C$. 
+\end{exercise}
+
+For a vector space $V$ and a subspace $W\subseteq V$, let 
+\[
+W^\perp=\{f\in V^*:f(w)=0\text{ for all $w\in W$}\}.
+\]
+Then $W^{\perp\perp}=W$. 
+Similarly, for a subspace $U$ of $V^*$, let 
+\[
+U^\perp=\{v\in V:\alpha(v)=0\text{ for all $\alpha\in U$}\}.
+\]
+Then $U\subseteq U^{\perp\perp}$. Note that
+if $\dim V=\infty$, it can happen that $U\subsetneq U^{\perp\perp}$. 
+
+\begin{definition}
+    \index{Coideal}
+    Let $C$ be a coalgebra. A \emph{left coideal} of $C$ 
+    is a subspace $D\subseteq C$ such that 
+    $\Delta(D)\subseteq C\otimes D$. 
+\end{definition}
+
+Similarly, one defines a \emph{right coideal} as a subspace
+$D$ of $C$ such that $\Delta(D)\subseteq D\otimes C$. 
+
+\begin{lemma}
+\label{lem:correspondence}
+    Let $C$ be a coalgebra. 
+    \begin{enumerate}
+        \item $D$ is a left (right) coideal of $C$ 
+        if and only if $D^\perp$ is a left  (right)
+        ideal of $C^*$. 
+        %\item $D$ is a right coideal of $C$ 
+        %if and only if $D^\perp$ is a right  
+        %ideal of $C^*$. 
+        \item If $I$ is left ideal of $C^*$, then 
+        $I^\perp$ is a left coideal of $C$. The converse holds if $C$ is infinite-dimensional.
+        %$\dim C<\infty$. 
+        % \item If $I$ is right ideal of $C^*$, then 
+        % $I^\perp$ is a right coideal of $C$. The converse holds if $\dim C<\infty$. 
+        \item $D$ is a simple subcoalgebra of $C$ 
+        if and only if $D^*$ is a simple algebra. 
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    The proofs of the corresponding results for right objects are similar and are omitted here.
+    \begin{enumerate}
+        \item Assume that $D$ is a left coideal of $C$. Then  
+        $\Delta(D)\subseteq C\otimes D$. Let $\alpha\in C^*$, $\beta\in D^\perp$ and $x\in D$. We want to show that
+        $C^*D^\perp\subseteq D^\perp$. We compute 
+        \[
+        (\alpha\beta)(x)=(\alpha\otimes\beta)(\Delta(x))
+        =\sum\alpha(x_1)\beta(x_2)\in \alpha(C)\beta(D)=0.
+        \]
+        The converse will follow from (2), as... 
+
+        \item Let $I$ be a left ideal of $C^*$. 
+        $C$ is a left $C^*$-comodule with 
+        \[
+        f\rightharpoonup x=\sum\langle f,x_2\rangle x_1.
+        \]
+        Moreover, $I^\perp$ is a left $C^*$-module, as 
+        if $f\in C^*$ and $x\in C$, 
+        \[
+        \langle I,r\rightharpoonup x\rangle
+        =\langle I,\sum f(x_2)x_1\rangle 
+        =\langle f(x_2)...
+        \]
+        \item If $D$ is a subcoalgebra, then $D$ is both left and right coideal and the claim follows from (1) and (2). Conversely...
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}
+    Any cocommutative complex coalgebra is pointed.  
+\end{theorem}
+
+\begin{proof}
+    Let $C$ be a cocommutative complex coalgebra and 
+    $D$ a simple subcoalgebra of $C$. Since $D$ is cocommutative and $\dim D<\infty$, it follows that 
+    $D^*$ is a finite-dimensional commutative simple algebra (see Lemma~\ref{lem:correspondence}). Thus $D^*$ is a finite-dimensional extension of $\C$. Hence $D\simeq\C$ and 
+    $C$ is pointed. 
+\end{proof}
+
+\section{The Cartier--Gabriel--Kostant theorem}
+
+We first describe 
+the semi direct product (or smash product) 
+of Hopf algebras. 
+
+% Maybe better here the full smash product of Molnar
+
+\begin{exercise}
+\label{xca:smash}
+Let $H$ be a complex cocommutative Hopf algebra and 
+$\mathfrak{g}=\operatorname{Prim}(H)$ and 
+$G$ the group 
+of group-like elements.  
+\begin{enumerate}
+    \item Prove that $G$ acts on $\mathcal{U}(\mathfrak{g})$.    
+    \item Prove that $\mathcal{U}(\mathfrak{g})\otimes\C[G]$ 
+    with the coproduct induced by the tensor product of 
+    coalgebras and multiplication
+    \[
+    (x\otimes g)(y\otimes h)=x(gyg^{-1})\otimes gh
+    \]
+    is a Hopf algebra. 
+\end{enumerate}
+\end{exercise}
+
+% 2.3.2 of SPLIT EXTENSION CLASSIFIERS IN THE CATEGORY OF
+% COCOMMUTATIVE HOPF ALGEBRAS
+% molnar paper 
+%\index{Smash product}
+The Hopf algebra of Exercise~\ref{xca:smash} is 
+called the \emph{smash product} of $\mathcal{U}(\mathfrak{g})$ and $\C[G]$
+and is denoted by $\mathcal{U}(\mathfrak{g})\rtimes\C[G]$. 
+
+% Cartier 4.5.1
+\begin{theorem}[Cartier--Gabriel--Kostant]
+    \index{Cartier--Gabriel--Kostant theorem}
+    \label{thm:CartierGabrielKostant}
+    Let $H$ be a cocommutative complex Hopf algebra 
+    and $\mathfrak{g}=\operatorname{Prim}(H)$ and $G$ 
+    the group of group-like elements. Then 
+    $H\simeq\mathcal{U}(\mathfrak{g})\rtimes\C[G]$ as 
+    Hopf algebras. 
+\end{theorem}
+
+\begin{proof}
+    See~\cite[Theorem 4.5.1]{zbMATH07372929}. 
+\end{proof}
+
+% What about the splitting? 
+% https://mathoverflow.net/questions/259307/cartier-kostant-milnor-moore-theorem
+
+\begin{corollary}
+\label{cor:CartierGabrielKostant}
+    Any finite-dimensional cocommutative complex Hopf algebra
+    is a group algebra. 
+\end{corollary}
+
+\begin{exercise}
+    Prove Corollary~\ref{cor:CartierGabrielKostant}
+\end{exercise}
+
+\section{The Kac--Paljutkin Hopf algebra}
+
+\index{Kac--Paljutkin Hopf algebra}
+Let $H$ be the algebra given by generators 
+$x,y,z$ and relations 
+\[
+x^2=y^2=z^2=1,\quad 
+xz=zx,\quad 
+zy=yz,\quad 
+xyz=yx.
+\]
+A routine calculation shows that $A$ is a bialgebra 
+with 
+comultiplication 
+\[
+\Delta(x)=xe_0\otimes x+xe_1\otimes y,
+\quad 
+\Delta(y)=ye_1\otimes x+ye_0\otimes y,
+\quad 
+\Delta(z)=z\otimes z,
+\]
+where $e_0=\frac12(1+z)$ and $e_1=\frac12(1-z)$, and 
+counit 
+\[
+\epsilon(x)=\epsilon(y)=\epsilon(z)=1.
+\]
+Moreover, $A$ is a Hopf algebra 
+with antipode 
+\[
+S(x)=xe_0+ye_1,\quad 
+S(y)=xe_1+ye_0,\quad 
+S(z)=z.
+\]
+
+\begin{exercise}
+\label{xca: KacPaljutkin}
+    Prove that $H$
+    is semisimple and non-pointed. 
+\end{exercise}
+
+% guiar mejor este ejercicio
+% ver paper de BURCIU
+
+\section{Braided monoidal categories}
+\begin{definition}
+\index{Monoidal category}
+A \emph{monoidal category} is a tuple
+$(\mathcal{C},\otimes,a,\mathbb{I},l,r)$, where $\mathcal{C}$ is a category,
+$\otimes:\mathcal{C}\times\mathcal{C}\to\mathcal{C}$ is a funtor, $\mathbb{I}$
+is an object of $\mathcal{C}$, $a_{U,V,W}:(U\otimes V)\otimes W\to
+U\otimes(V\otimes W)$ is a natural isomorphism such that 
+\begin{equation}
+(\id_{U}\otimes a_{V,W,X})a_{U,V\otimes W,X}(a_{U,V,W}\otimes\id_{X})=a_{U,V,W\otimes X}a_{U\otimes V,W,X}\label{eq:pentagon}
+\end{equation}
+for all objects $U$,$V$, $W$ of $\mathcal{C}$ and $r_{U}:U\otimes\mathbb{I}\to U$
+and $l_{U}:\mathbb{I}\otimes U\to U$ are natural isomorphism such
+that 
+\begin{equation}
+(\id_{V}\otimes l_{W})a_{V,I,W}=r_{V}\otimes\id_{W}\label{eq:triangles}
+\end{equation}
+for all objects $U,W$ of $\mathcal{C}$.
+\end{definition}
+
+\begin{definition}
+\index{Monoidal category!strict}
+A monoidal category $\mathcal{C}$ is called \emph{strict} if the natural
+isomorphism $a$, $l$ y $r$ are identities. 
+\end{definition}
+
+Without loss of generality, we may assume that our monoidal categories are strict. Thanks to 
+MacLane's coherence theorem~\cite[Theorem XI.5.3]{zbMATH00706259}, every monoidal category is monoidally equivalent to a strict one. This allows us to avoid dealing with the natural isomorphisms $a$, $l$ and $r$ in our computations, simplifying the presentation of braided structures.
+
+\index{Category!of left modules}
+\index{Category!of right modules}
+For a Hopf algebra $H$, 
+we write $\lmod{H}$ to denote the category of 
+left $H$-modules and $\rmod{H}$ 
+to denote the category of right $H$-modules, with $H$-module 
+homomorphisms as morphisms in each case.
+
+\begin{example}
+\index{Tensor product!of modules}
+Let $H$ be a Hopf algebra. Then $\lmod{H}$ is a monoidal
+category.  Recall that if $V$ and $W$ are two left $H$-modules, the tensor
+product of $V$ and $W$ is defined by 
+\[
+h\rightarrow(v\otimes w)=\sum (h_{1}\rightarrow v)\otimes(h_{2}\rightarrow w)
+\]
+for all $h\in H$, $v\in V$, $w\in W$. 
+\end{example}
+
+\index{Category!of left comodulesa}
+\index{Category!of right comodules}
+For a Hopf algebra $H$, 
+we write $\lcomod{H}$ to denote the category of 
+left $H$-comodules and $\rcomod{H}$ 
+to denote the category of right $H$-comodules, with $H$-comodule 
+homomorphisms as morphisms in each case.
+
+\begin{example}
+\index{Tensor product!of comodules}
+Let $H$ be a Hopf algebra. Then $\lcomod{H}$ is a monoidal
+category.  Recall that if $V$ and $W$ are two left $H$-comodules, the tensor
+product of $V$ and $W$ is defined defined by 
+\[
+\delta(v\otimes w)=\sum v_{-1}w_{-1}\otimes(v_0\otimes w_0)
+\]
+for all $v\in V$, $w\in W$.
+\end{example}
+
+% \begin{example}
+% \index{tensor product!of Yetter-Drinfeld modules}
+% Let $H$ be a Hopf algebra with invertible antipode. Then
+% $\ydH$ is a monoidal category. 
+% \end{example}
+
+\begin{definition}
+\index{Monoidal category!braided}
+A monoidal category $\mathcal{C}$ is \emph{braided} if there
+exists a natural isomorphism $c:\otimes\to\otimes^{\mathrm{op}}$
+such that
+\begin{align}
+c_{U,V\otimes W} & =(\id_{V}\otimes c_{U,W})(c_{U,V}\otimes\id_{W}),\label{eq:braided1}\\
+c_{U\otimes V,W} & =(c_{U,W}\otimes\id_{V})(\id_{U}\otimes c_{V,W})\label{eq:braided2}
+\end{align}
+for all objects $U,V,W$ of $\mathcal{C}$. 
+\end{definition}
+
+\begin{definition}
+\index{Monoidal category!symmetric}
+A braided monoidal category is \emph{symmetric} if 
+\[
+c_{U,V}c_{V,U}=\id_{U\otimes V}
+\]
+for all objects $U,V$ of $\mathcal{C}$.
+\end{definition}
+
+The naturality of the braiding $c$ means that if $V,W$ are objects
+of $\mathcal{C}$ then there exists a morphism $c_{V,W}:V\otimes W\to W\otimes V$
+such that the diagram 
+\[
+\begin{tikzcd}
+V \otimes W \arrow[d, "f \otimes g"'] \arrow[r, "c_{V,W}"] & W \otimes V \arrow[d, "g \otimes f"] \\
+V' \otimes W' \arrow[r, "c_{V',W'}"'] & W' \otimes V'
+\end{tikzcd}
+\]
+is commutative for all pair of morphisms $f:V\to V'$ and $g:W\to W'$.
+
+\begin{proposition}
+Let $U$, $V$ and $W$ be objects of a braided monoidal category $\mathcal{C}$.
+Then 
+\begin{align*}
+(c_{V,W}\otimes\textrm{id}_{U})(\textrm{id}_{V}&\otimes c_{U,W})(c_{U,V}\otimes\textrm{id}_{W})\\
+&=(\textrm{id}_{W}\otimes c_{U,V})(c_{U,W}\otimes\textrm{id}_{V})(\textrm{id}_{U}\otimes c_{V,W}).
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+It follows from Equations \eqref{eq:braided1}--\eqref{eq:braided2} and the
+diagram
+\[
+\begin{tikzcd}
+(U \otimes V) \otimes W \arrow[d, "c_{U,V} \otimes \mathrm{id}_W"'] \arrow[r, "c_{U \otimes V, W}"] 
+  & W \otimes (U \otimes V) \arrow[d, "\mathrm{id}_W \otimes c_{U,V}"] \\
+(V \otimes U) \otimes W \arrow[r, "c_{V \otimes U, W}"'] 
+  & W \otimes (V \otimes U)
+\end{tikzcd}
+\]
+obtained from the naturality of the braiding with
+$f=c_{U,V}\otimes\id_W$ and $g=\id_W$.
+\end{proof}
+
+%\begin{example}
+%Let $H$ be a quasitriangular Hopf algebra. The category of left $H$-modules is
+%a braided monoidal category.
+%\end{example}
+% \begin{example}
+% Let $H$ be a Hopf algebra with invertible antipode. 
+% Then $\ydH$ is a braided
+% monoidal category.
+% \end{example}
+
+\begin{exercise}
+\label{xca:QT}
+\index{Hopf algebra!quasitriangular}
+    Let $H$ be a Hopf algebra. Prove that 
+    $\lmod{H}$ is a braided
+    monoidal category if and only if $H$ is \emph{quasitriangular}, that is, there exists an invertible element
+    $R=\sum_{i}a_{i}\otimes b_{i}\in H\otimes H$ such that 
+\begin{align*}
+\sum h_{2}a_{i}\otimes h_{1}b_{i} & =\sum a_{i}h_{1}\otimes b_{i}h_{2},\\
+\sum a_{i,1}\otimes a_{i,2}\otimes b_{i} & =\sum a_{i}\otimes a_{j}\otimes b_{i}b_{j},\\
+\sum a_{i}\otimes b_{i,1}\otimes b_{i,2} & =\sum a_{i}a_{j}\otimes b_{j}\otimes b_{i}.
+\end{align*}
+for all $h\in H$. 
+\end{exercise} 
+
+Similarly, $\lcomod{H}$ is braided if and only if $H$ is \emph{coquasitriangular}, a notion that is dual to quasitriangular. See~\cite[\S 10.2]{zbMATH00482792} for the details. 
+
+\begin{exercise}
+\label{xca:T}
+\index{Hopf algebra!triangular}
+Let $H$ be a Hopf algebra. Prove that 
+    $\lmod{H}$ is a symmetric 
+    if and only if $H$ is \emph{triangular}, that is 
+    $(H,R)$ 
+    is quasitriangular 
+    and $\tau(R)=R^{-1}$. 
+\end{exercise}
+
+\subsection{Algebras in categories}
+Now there is a natural way of defining an algebra in a monoidal category. 
+
+\begin{definition}
+\index{Algebra!in a monoidal category}
+Let $\mathcal{C}$ be a monoidal category. An \emph{algebra} in
+$\mathcal{C}$ is a triple $(A,m,u)$, where $A$ is an object of
+$\mathcal{C}$, $m\in\Hom(A\otimes A,A)$ and $u\in\Hom(\mathbb{I},A)$ such that 
+\begin{gather*}
+m(\id\otimes m)=m(m\otimes\id),\\
+m(\id\otimes u)=\id=m(u\otimes\id).
+\end{gather*}
+\end{definition}
+
+Let $A$ and $B$ be algebras in $\mathcal{C}$ and $f\in\Hom(A,B)$.
+Then $f$ is a \emph{morphism} (of algebras in $\mathcal{C}$)
+if $m_{B}(f\otimes f)=fm_{A}$ and $fu_{A}=u_{B}$. This allows
+us to define the category $\operatorname{Alg}(\mathcal{C})$
+of algebras in $\mathcal{C}$. 
+
+\begin{example}
+An algebra in the category of vector spaces (with the usual tensor product) is an algebra in
+the usual sense.
+\end{example}
+
+\begin{example}
+\index{Module!algebra}
+\index{Comodule!algebra}
+Let $H$ be a Hopf algebra. An algebra in $\lmod{H}$ is a left $H$-module-algebra. 
+An algebra in $\lcomod{H}$ 
+is a left 
+$H$-comodule-algebra.
+\end{example}
+
+
+
+%\begin{exercise}
+%Prove that 
+%This is equivalent to ask for
+%$\delta$ to be a morphism of algebras. 
+%\end{exercise}
+
+\begin{example}
+\index{Tensor product!of algebras in braided categories}
+Let $(\mathcal{C},c)$ be a braided category and let $A$ and $B$ be two algebras
+in $\mathcal{C}$. Then $A\otimes B$ is an algebra in $\mathcal{C}$ with
+multiplication 
+\[
+m_{A\otimes B}=(m_A\otimes m_B)(\id_A\otimes c_{B,A}\otimes \id_B).
+\]
+\end{example}
+
+\subsection{Coalgebras in categories}
+Similarly ones defines coalgebras in categories.
+
+\begin{definition}
+\index{Coalgebra!in a monoidal categorie}
+Let $\mathcal{C}$ be a monoidal category. A \emph{coalgebra}
+in $\mathcal{C}$ is a triple $(C,\Delta,\epsilon)$, where
+$C$ is an object of $\mathcal{C}$, $\Delta\in\Hom(C,C\otimes C)$
+and $\epsilon\in\Hom(C,\mathbb{I})$, such that 
+\begin{gather*}
+(\Delta\otimes\id)\Delta=(\id\otimes\Delta)\Delta\quad\text{and}\quad 
+(\id\otimes\epsilon)\Delta=(\epsilon\otimes\id)\Delta=\id.
+\end{gather*}
+\end{definition}
+
+Let $C$ and $D$ be two coalgebras in $\mathcal{C}$ and $f\in\Hom(C,D)$.
+Then $f$ is a \emph{morphism} (of coalgebras in $\mathcal{C}$)
+if $\Delta_{D}f=(f\otimes f)\Delta_{C}$ and $\epsilon_{D}f=\epsilon_{C}$. 
+This allows us to define the category $\mathrm{Coalg}(\mathcal{C})$
+of coalgebras in $\mathcal{C}$.
+
+\begin{example}
+A coalgebra in the category of vector spaces 
+is a coalgebra in the usual sense.
+\end{example}
+
+\begin{example}
+\index{Module!coalgebra}
+Let $H$ be a Hopf algebra. 
+A coalgebra in $\lmod{H}$ is a left $H$-module-coalgebra.
+\end{example}
+
+%\begin{exercise}
+%This is equivalent to ask for the action $\to$ to be a morphism of
+%coalgebras.
+%\end{exercise}
+
+\begin{example}
+\index{Comodule!coalgebra}
+Let $H$ be a Hopf algebra. 
+A coalgebra in $\lcomod{H}$ 
+is a left $H$-comodule-coalgebra.
+\end{example}
+
+\begin{example}
+\index{Tensor product!of coalgebras in braided categories}
+Let $(\mathcal{C},c)$ be a braided category and let $C$ and $D$ be two
+coalgebras in $\mathcal{C}$. Then $C\otimes D$ is an coalgebra in $\mathcal{C}$
+with comultiplication 
+\[
+\Delta_{C\otimes D}=(\id_C\otimes c_{C,D}\otimes \id_D)(\Delta_C\otimes\Delta_D).
+\]
+\end{example}
+
+\begin{definition}
+\index{Bialgebra!in a braided categorie}
+Let $\mathcal{C}$ be a braided monoidal category with braiding $c$.
+A \emph{bialgebra} in $\mathcal{C}$ is a tuple $(B,m,\eta,\Delta,\epsilon)$,
+where $(B,m,\eta)$ is an algebra in $\mathcal{C}$, $(B,\Delta,\epsilon)$
+is a coalgebra in $\mathcal{C}$, such that $\Delta\in\Hom(B,B\otimes B)$
+and $\epsilon\in\Hom(B,\mathbb{I})$ are morphism of algebras.
+\end{definition}
+
+% Here $B\otimes B$ is the algebra in $\mathcal{C}$ given by the product
+% \[
+% (m_{B}\otimes m_{B})(\id\otimes c_{B,B}\otimes\id).
+% \]
+
+\begin{exercise}
+Let $H$ be a quasitriangular Hopf algebra with $R=\sum a_{i}\otimes b_{i}$.
+Then $\lmod{H}$ is braided with braiding
+\[
+c_{V,W}(v\otimes w)=\sum_{i}b_{i}\cdot w\otimes a_{i}\cdot v.
+\]
+\end{exercise}
+
+\begin{exercise}
+    Prove that $H$ is a bialgebra in $\lmod{H}$ if $H$ is an algebra
+and a coalgebra in $\lmod{H}$ and 
+\[
+\sum (hh')_{1}\otimes(hh')_{2}=\sum_{i}\sum h_{1}(b_{i}\cdot h'_{1})\otimes(a_{i}\cdot h_{2})h'_{2}
+\]
+for all $h,h'\in H$.
+\end{exercise}
+
+\section{Yetter--Drinfeld modules}
+
+\begin{definition}
+\index{Yetter--Drinfeld module}
+Let $H$ be a Hopf algebra. A \emph{Yetter--Drifeld module} over $H$ is a
+triple $(V,\rightarrow,\delta)$, where $(V,\rightarrow)$ is a left $H$-module,
+$(V,\delta)$ is a left $H$-comodule, and such that 
+\begin{equation}
+\delta(h\rightarrow v)=\sum h_{1}v_{-1}Sh_{3}\otimes h_{2}\rightarrow v_{0}\label{eq:YD}
+\end{equation}
+for all $h\in H$, $v\in V$. 
+\end{definition}
+
+\begin{definition}
+\index{Yetter--Drinfeld module!homomorphism}
+A \emph{homomorphism} of Yetter--Drinfeld modules over $H$ 
+is a homomorphism of left $H$-modules and left $H$-comodules. 
+\end{definition}
+
+\index{Category!of Yetter--Drinfeld modules}
+The category of Yetter--Drinfeld
+modules will be denoted by $\ydH$.
+
+\begin{example}
+Let $H$ be a Hopf algebra with the trivial action and coaction on itself, that is 
+$h\rightarrow x=\epsilon(h)x$ and $\delta(h)=1\otimes h$ for all $h,x\in H$.
+Then $H$ is a Yetter--Drinfeld module over $H$.
+\end{example}
+
+\begin{example}
+Let $H$ be a Hopf algebra. Then $(H,\mathrm{adj},\Delta)$ and
+$(H,m,\mathrm{coadj})$ are Yetter--Drinfeld modules over $H$.
+\end{example}
+
+\begin{exercise}
+\label{xca:YD_condition}
+Prove that~\eqref{eq:YD} can be replaced by 
+\begin{equation}
+\label{eq:left_left_YD_equivalent}
+\sum h_{1}v_{-1}\otimes(h_{2}\rightarrow v_{0})
+=\sum (h_{1}\rightarrow v)_{-1}h_{2}\otimes(h_{1}\rightarrow v)_{0}.
+\end{equation}
+\end{exercise}
+
+\begin{exercise}
+Let $G$ be a group and $H=K[G]$. Assume that
+$(V,\rightarrow)$ is a left $H$-module, and $(V,\delta)$ is a left
+$H$-comodule. Prove the following statements:
+\begin{enumerate}
+\item $V=\oplus_{g\in G}V_{g}$, where $V_{g}=\{v\in V\mid\delta(v)=g\otimes v\}$.  
+\item The triple $(V,\rightarrow,\delta)$ is a Yetter--Drinfeld
+module if and only if $h\rightarrow V_{g}\subseteq V_{hgh^{-1}}$ for all
+$g,h\in H$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}\label{xca:YD_tensor}
+Let $V$ and $W$ be two Yetter--Drinfeld modules over $H$. Then $V\otimes W$ is a
+Yetter--Drinfeld over $H$, where 
+\begin{align*}
+h\rightarrow(v\otimes w) & =\sum (h_{1}\rightarrow v)\otimes(h_{2}\rightarrow w),\\
+\delta(v\otimes w) & =\sum v_{-1}w_{-1}\otimes(v_{0}\otimes w_{0})
+\end{align*}
+for all $h\in H$, $v\in V$, $w\in W$.
+\end{exercise}
+
+Let $H$ be a Hopf algebra with invertible antipode. For any pair $V$ and $W$ of
+Yetter--Drinfeld modules over $H$, we consider the map 
+\begin{align*}
+c_{V,W}\colon V\otimes W&\to W\otimes V\\
+v\otimes w&\mapsto \sum (v_{-1}\rightarrow w)\otimes v_{0}.
+\end{align*}
+
+\begin{proposition}
+The map $c_{V,W}$ is an isomorphism in $\ydH$.
+\end{proposition}
+
+\begin{proof}
+The map $c$ is invertible and the inverse is 
+\begin{align*}
+c_{V,W}^{-1}:W\otimes V & \to V\otimes W\\
+w\otimes v & \mapsto \sum v_{0}\otimes(S^{-1}(v_{-1})\to w)
+\end{align*}
+since
+\begin{align*}
+c_{V,W}^{-1}c_{V,W}(v\otimes w) & =\sum c_{V,W}^{-1}((v_{-1}\to w)\otimes v_{0})\\
+ & =\sum v_{0,0}\otimes(S^{-1}(v_{0,-1})\to(v_{-1}\to w))\\
+ & =\sum v_{0,0}\otimes(S^{-1}(v_{0,-1})v_{-1}\to w)\\
+ & =\sum v_{0}\otimes(S^{-1}(v_{-1})v_{-2}\to w)\\
+ & =\sum v_{0}\otimes(\epsilon(v_{-1})1\to w)\\
+ & =v\otimes w,
+\end{align*}
+and similarly $c_{V,W}c_{V,W}^{-1}(w\otimes v)=w\otimes v$. 
+
+Now we prove that $c_{V,W}$ is a homomorphism of $H$-modules: 
+\begin{align*}
+c_{V,W}(h\rightarrow (v\otimes w))&=\sum c_{V,W}(h_1\rightarrow v\otimes h_2\rightarrow w)\\
+&=\sum (h_1\rightarrow v)_{-1}\rightarrow(h_2\rightarrow w)\otimes(h_1\rightarrow v)_0\\
+&=\sum (h_{11}v_{-1}Sh_{13})\rightarrow(h_2\rightarrow w)\otimes h_{12}\rightarrow v_0\\
+&=\sum (h_1v_{-1}(Sh_3)h_4)\rightarrow w\otimes h_2\rightarrow v_0\\
+&=\sum (h_1v_{-1})\rightarrow w\otimes h_2\rightarrow v_0\\
+&=\sum h_1\rightarrow(v_{-1}\rightarrow w)\otimes h_2\rightarrow v_0\\
+&=\sum h\rightarrow((v_{-1}\rightarrow w)\otimes v_0).
+\end{align*}
+
+To prove that $c_{V,W}$ is a homomorphism of comodules we need $(\id\otimes
+c)\delta=\delta c$.  We compute:
+\[
+(\id\otimes c)\delta(v\otimes w)=\sum v_{-1}w_{-1}\otimes (v_{0,-1}\rightarrow w_0)\otimes v_{0,0}.
+\]
+On the other hand,
+\begin{align*}
+\delta(c(v\otimes w)&=\sum\delta(v_{-1}\rightarrow w\otimes v_0)\\
+&=\sum (v_{-1}\rightarrow w)_{-1}v_{0,-1}\otimes(v_{-1}\rightarrow w)_0\otimes v_{0,0}\\
+&=\sum (v_{-2}\rightarrow w)_{-1}v_{-1}\otimes (v_{-2}\rightarrow w)_0\otimes v_0\\
+&=\sum v_{-2,1}w_{-1}S(v_{-2,3})v_{-1}\otimes(v_{-2,2}\rightarrow w_0)\otimes v_0\\
+&=\sum v_{-4}w_{-1}S(v_{-2})v_{-1}\otimes (v_{-3}\rightarrow w_0)\otimes v_0\\
+&=\sum v_{-2}w_{-1}\otimes(v_{-1}\rightarrow w_0)\otimes v_0.\qedhere
+\end{align*}
+\end{proof}
+
+\begin{exercise}
+\label{xca:YD_hexagons}
+Let $H$ be a Hopf algebra, and let $U$, $V$ and $W$
+be three objects of $\ydH$. Prove the following statements: 
+\begin{align}
+c_{U\otimes V,W} & =(c_{U,W}\otimes\id_{V})(\id_{U}\otimes c_{V,W}).\label{eq:(cx1)(1xc)}\\
+c_{U,V\otimes W} & =(\id_{V}\otimes c_{U,W})(c_{U,V}\otimes\id_{W})\label{eq:(1xc)(cx1)}.
+\end{align}
+\end{exercise}
+
+\begin{exercise}
+\label{xca:YD_naturality}
+Let $H$ be a Hopf algebra. Prove that 
+\[
+c_{V',W'}(f\otimes g)=(g\otimes f)c_{W,V}
+\]
+for all Yetter--Drinfeld modules homomorphisms $f:V\to V'$ and $g:W\to W'$. 
+\end{exercise}
+
+\begin{theorem}
+\label{theorem:YD_braid_equation}
+Let $H$ be a Hopf algebra with invertible antipode, and let $U,V,W$
+be Yetter--Drinfeld modules over $H$. Then 
+%\begin{align*}
+%c_{V,W}:V\otimes W&\to W\otimes V\\
+%v\otimes w&\mapsto (v_{-1}\rightarrow w)\otimes v_{0},
+%\end{align*}
+%is an isomorphism in $_{H}^{H}\mathcal{YD}$ and it is a solution of the braid
+%equation:
+\begin{align*}
+(c_{V,W}\otimes\textrm{id}_{U})(\textrm{id}_{V}&\otimes c_{U,W})(c_{U,V}\otimes\textrm{id}_{W})\\
+&=(\textrm{id}_{W}\otimes c_{U,V})(c_{U,W}\otimes\textrm{id}_{V})(\textrm{id}_{U}\otimes c_{V,W}).
+\end{align*}
+\end{theorem}
+
+\begin{proof} 
+It follows immediately from Exercise~\ref{xca:YD_naturality} with
+$f=c_{U,V}\otimes\id_W$ and $g=\id_W$ and Exercise~\ref{xca:YD_hexagons}.
+\end{proof}
+
+% \begin{exercise}
+% Prove Theorem \ref{theorem:YD_braid_equation} without using Exercises
+% \ref{xca:YD_naturality} and \ref{xca:YD_hexagons}.
+% \end{exercise}
+
+%It remains
+%to prove that $c$ is natural, i.e., 
+%\[
+%(g\otimes f)c_{V,W}=c_{V',W'}(f\otimes g).
+%\]
+%So let $V$, $V'$, $W$ and $W'$ be objects of $_{H}^{H}\mathcal{YD}$,
+%and $f\in\Hom(V,V')$, $g\in\Hom(W,W')$. We compute 
+%\begin{align*}
+%(g\otimes f)c_{V,W}(v\otimes w) & =(g\otimes f)(v_{-1}\to w\otimes v_{0})\\
+% & =g(v_{-1}\to w)\otimes f(v_{0})\\
+% & =v_{-1}\to g(w)\otimes f(v_{0})
+%\end{align*}
+%and
+%\begin{align*}
+%c_{V',W'}(f\otimes g)(v\otimes w) & =f(v)\otimes g(w)\\
+% & =f(v)_{-1}\to g(w)\otimes f(v)_{0}\\
+% & =v_{-1}\to g(w)\otimes f(v_{0})
+%\end{align*}
+%(here we use that $f$ is morphism of $H$-comodules). Hence the claim
+%holds.
+
+%\subsection{The category $_H\mathcal{YD}^H$}
+
+% We will also work with the following variation of what a Yetter--Drinfeld module
+% is: An object $V$ in the category 
+% $\prescript{}{H}{\mathcal{YD}^H}$
+% $_{H}\mathcal{YD}^{H}$ 
+% is a triple
+% $(V,\rightarrow,\delta)$, where $(V,\rightarrow)$ is a left $H$-module,
+% $(V,\delta)$ is a right $H$-comodule, such that
+% \[
+% h_{1}\rightarrow v_{0}\otimes h_{2}v_{1}=(h_{2}\rightarrow v)_{0}\otimes(h_{2}\rightarrow v)_{1}h_{1},
+% \]
+% or equivalently
+% \[
+% \delta(h\rightarrow v)=h_{2}\rightarrow v_{0}\otimes h_{3}v_{1}S^{-1}h_{1},
+% \]
+% for all $v\in V$, $h\in H$. 
+% %\end{rem}
+
+% %\begin{exercise}
+% %Let $H$ be a Hopf algebra with bijective antipode. Prove that the categories
+% %$_{H}^{H}\mathcal{YD}$ and $_{H}\mathcal{YD}^{H}$ are equivalent.
+% %\end{exercise}
+% %
+% %\begin{solution}
+% %Let $(V,\rightarrow,\delta)$ be an object of $_{H}^{H}\mathcal{YD}$, where we
+% %write $\delta(v)=v_{-1}\otimes v_{0}$. Let $\rho:V\to V\otimes H$ be the linear
+% %map defined by $\rho(v)=Sv_{1}\otimes v_{0}$. Then $(V,\rightarrow,\rho)$ is an
+% %object of $_{H}\mathcal{YD}^{H}$. The converse is similar. 
+% %\end{solution}
+
+% \begin{exercise}
+% Let $H$ be a finite-dimensional Hopf algebra with bijective antipode.  Assume that
+% $(V,\rightarrow,\delta_R)$ is an object of $_{H}\mathcal{YD}^{H}$ and define
+% \[
+% \delta_L(v)=S(v_1)\otimes v_0
+% \]
+% for all $v\in V$.  Prove that
+% $(V,\rightarrow,\delta_L)$ is an object of $\ydH$. 
+% Conversely, if $(V,\rightarrow,\delta_L)$ is an object of $\ydH$,
+% define \[
+% \delta_R(v)=v_0\otimes S^{-1}v_{-1}
+% \]
+% for all $v\in V$. Prove that
+% $(V,\rightarrow,\delta_R)$ is an object of $_H\mathcal{YD}^H$.
+% \end{exercise}
+
+%\subsection{Yetter--Drinfeld modules and the Drinfeld double}
+% There is a deep connection between Yetter--Drinfeld modules and the Drinfeld double. To conclude this section we will prove 
+% that there is an equivalence between $_H\mathcal{YD}^H$ and $_{\mathcal{D}(H)}\mathcal{M}$. 
+
+% \begin{exercise}
+% Let $H$ be a finite-dimensional Hopf algebra. Assume that $\{h_i\}$ is a basis
+% of $H$, and let $\{h^i\}$ be its dual basis.  Prove that the element
+% \[
+% \sum h^i\otimes h_i
+% \]
+% does not depend on the pair of dual basis $\{h_i\}$ and $\{h^i\}$.
+% \end{exercise}
+
+% \begin{lemma}
+% \label{lem:DH_compatibility}
+% Let $H$ be a finite-dimensional Hopf algebra. Then  $V$ is a left
+% $\mathcal{D}(H)$-module if and only if $V$ is a left $H$-module, a left
+% $H^{*}$-module and 
+% \begin{eqnarray}
+% h\cdot(f\cdot v) & = & f(S^{-1}(h_{3})?h_{1})\cdot(h_{2}\cdot v)\label{eq:compatibility_D(H)}
+% \end{eqnarray}
+% for all $h\in H$, $f\in H^{*}$.
+% \end{lemma}
+
+% \begin{proof}
+% We compute 
+% \begin{align*}
+% (1\otimes h)\cdot((f\otimes1)\cdot v) & =((1\otimes h)(f\otimes1))\cdot v\\
+%  & =(f(S^{-1}(h_{3})?h_{1})\otimes h_{2})\cdot v\\
+%  & =(f(S^{-1}(h_{3})?h_{1})\otimes1)(1\otimes h_{2}))\cdot v\\
+%  & =f(S^{-1}(h_{3})?h_{1})\cdot(h_{2}\cdot v).
+% \end{align*}
+% and the claim follows. 
+% \end{proof}
+
+% \begin{lemma}
+% \label{lem:DH_to_YD}
+% Let $H$ be a finite-dimensional Hopf algebra and assume that $\{h_i\}$ is a basis
+% of $H$, and let $\{h^i\}$ be its dual basis.  
+% Let $(V,\cdot)$ be a left $\mathcal{D}(H)$-module. For any $v\in V$ define 
+% \[
+% \delta(v)=\sum h^i\cdot v\otimes h_i.
+% \]
+% Then the triple $(V,\cdot,\delta)$ is an object of $_H\mathcal{YD}^H$.
+% \end{lemma}
+
+% \begin{proof}
+% We prove the compatibility condition
+% \begin{equation}
+% \label{eq:DH_to_YD}
+% \sum h^i\cdot (v\cdot v)\otimes h_i=\sum x_2\cdot(h^i\cdot v)\otimes x_3h_iS^{-1}x_1
+% \end{equation}
+% for all $x\in H$, $v\in V$. Let $f\in H^*$ and apply $(\id\otimes f)$ to the
+% left hand side of \eqref{eq:DH_to_YD} to obtain
+% \[
+% \sum h^i\cdot (x\cdot v)f(h_i)=f\cdot (x\cdot v).
+% \]
+% On the other hand, applying $(\id\otimes f)$ to the right hand side of
+% \eqref{eq:DH_to_YD} we obtain
+% \begin{align*}
+% %(\id\otimes f)&\left(\sum x_2\cdot (h^i\cdot v)\otimes x_3h_1S^{-1}x_1\right)\\
+% \sum x_2\cdot(h^i\cdot v) f(x_3h_iS^{-1}x_1)&=
+% x_2\cdot\left( f(x_3?S^{-1}x_1)\cdot v\right)\\
+% &=f(x_3S^{-1}x_{23}?x_{21}S^{-1}x_1)\cdot (x_{22}\cdot v)\\
+% &=f(x_5S^{-1}x_4?x_2S^{-1}x_1)\cdot(x_3\cdot v)\\
+% &=f\cdot (x\cdot v)
+% \end{align*}
+% and the claim follows.
+% \end{proof}
+
+% \begin{lemma}
+% \label{lem:YD_to_DH}
+% Let $H$ be a finite-dimensional Hopf algebra. Let 
+% $(V,\cdot,\delta)$ be an object of $_H\mathcal{YD}^H$. Then $V$ is a left
+% $\mathcal{D}(H)$-module via 
+% \[
+% (f\otimes h)\cdot v=\langle f\mid (h\cdot v)_1\rangle (h\cdot v)_0
+% \]
+% for all $f\in H^*$, $h\in H$ and $v\in V$.
+% \end{lemma}
+
+% \begin{proof}
+% By Lemma \ref{lem:DH_compatibility}, we need prove that
+% \[
+% h \cdot(f\cdot v)=\langle f\mid v_1\rangle(h\cdot v_0)
+% \]
+% for all $f\in H^*$, $h\in H$, $v\in V$. We compute:
+% \begin{align*}
+% f(S^{-1}h_3?h_1)\cdot(h_2\cdot v)&=\langle f\mid S^{-1}h_3(h_2\cdot v)_1h_1\rangle(h_2\cdot v)_0\\
+% &=\langle f\mid S^{-1}h_3(h_{23}v_1S^{-1}h_{21})h_1\rangle(h_{22}\cdot v_0)\\
+% &=\langle f\mid S^{-1}h_5h_4v_1S^{-1}h_2h_1\rangle h_3\cdot v_0\\
+% &=\langle f\mid v_1\rangle (h\cdot v_0)
+% \end{align*}
+% and the claim follows.
+% \end{proof}
+
+% \begin{theorem}
+% The categories $_H\mathcal{YD}^H$ and $_{\mathcal{D}(H)}\mathcal{M}$ are
+% equivalent.
+% \end{theorem}
+
+% \begin{proof}
+% It follows from Lemmas \ref{lem:DH_to_YD} and \ref{lem:YD_to_DH}.
+% \end{proof}
+
+\section{Radford biproduct}
+
+% When $A\otimes H$ a bialgebra, where
+% the algebra structure is given by the smash product
+% \[
+% (a\otimes h)(a'\otimes h')=a(h_{1}\to a')\otimes h_{2}h'
+% \]
+% for all $a,a'\in A$, $h,h'\in H$, and the coalgebra structure is
+% the smash coproduct
+% \[
+% \Delta(a\otimes h)=(a_{1}\otimes a_{2,-1}h_{1})\otimes(a_{2,0}\otimes h_{2})
+% \]
+% for all $a\in A$, $h\in H$. 
+
+\begin{theorem}[Radford]
+\label{theorem:radford}
+Let $H$ be Hopf algebra, and let $A$ be an algebra and a coalgebra such that
+$(A,\rightarrow)$ a left $H$-module-algebra and $(A,\delta)$ a left
+$H$-comodule-coalgebra.  Assume that 
+\begin{gather}
+A\text{ is a left \ensuremath{H}-comodule-algebra},\label{eq:radford_1}\\
+A\text{ is a left \ensuremath{H}-module-coalgebra,}\label{eq:radford_2}\\
+\epsilon_{A}\text{ is a morphism of algebras,}\label{eq:radford_3}\\
+\Delta(1_{A})=1_{A}\otimes1_{A},\label{eq:radford_4}\\
+\Delta(aa')=a_{1}\left(a_{2,-1}\rightarrow a'_{1}\right)\otimes a_{2,0}a'_{2},\label{eq:radford_5}\\
+\left(h_{1}\rightarrow a\right)_{-1}h_{2}\otimes\left(h_{1}\rightarrow a\right)_{0}=h_{1}a_{-1}\otimes h_{2}\rightarrow a_{0}.\label{eq:radford_6}
+\end{gather}
+for all $a,a'\in A$, $h\in H$.
+Then the vector space $A\otimes H$ is a bialgebra with the algebra structure
+given by the left smash product and the coalgebra is the left smash coproduct.
+Furthermore, if $A$ has an antipode $S_A$, then $A\otimes H$ is a Hopf algebra
+with antipode
+\[
+S(a\otimes h)=(1_A\otimes S_{H}(a_{-1}h))(S_{A}(a_{0})\otimes1_H)
+\]
+for all $a\in A$, $h\in H$.
+\end{theorem}
+
+\begin{proof}
+We first prove that $\epsilon$ is a morphism of algebras: 
+\begin{align*}
+\epsilon((a\otimes h)(a'\otimes h')) & =\epsilon(a(h_{1}\to a')\otimes h_{2}h')\\
+ & =\epsilon(a(h_{1}\to a')\epsilon(h_{2}h')\\
+ & =\epsilon(a)\epsilon(h_{1}\to a')\epsilon(h_{2})\epsilon(h')\\
+ & =\epsilon(a)\epsilon(h_{1})\epsilon(a')\epsilon(h_{2})\epsilon(h')\\
+ & =\epsilon(a)\epsilon(h)\epsilon(a')\epsilon(h')\\
+ & =\epsilon(a\otimes h)\epsilon(a'\otimes h'),
+ \end{align*}
+and $\epsilon(1\otimes1)=1$.  Now we prove that $\Delta$ is a morphism of
+algebras. By \eqref{eq:radford_4}, we need to prove that $\Delta$ is
+multiplicative. We compute:
+\begin{align*}
+\Delta & (a\otimes h)\Delta(a'\otimes h')\\
+ & =(a_{1}\otimes a_{2,-1}h_{1}\otimes a_{2,0}\otimes h_{2})(a'_{1}\otimes a'_{2,-1}h'_{1}\otimes a'_{2,0}\otimes h'_{2})\\
+ & =(a_{1}\otimes a_{2,-1}h_{1})(a'_{1}\otimes a'_{2,-1})\otimes(a_{2,0}\otimes h_{2})(a'_{2,0}\otimes h'_{2})\\
+ & =a_{1}((a_{2,-1}h_{1})_{1}\to a'_{1})\otimes(a_{2,-1}h_{1})_{2}a'_{2,-1}h'_{1}\otimes a_{2,0}(h_{2,1}\to a'_{2,0})\otimes h_{2,2}h'_{2}\\
+ & =a_{1}((a_{2,-1,1}h_{1,1})\to a'_{1})\otimes a_{2,-1,2}h_{1,2}a'_{2,-1}h'_{1}\otimes a_{2,0}(h_{2,1}\to a'_{2,0})\otimes h_{2,2}h'_{2}\\
+ & =a_{1}((a_{2,-1,1}h_{1})\to a'_{1})\otimes a_{2,-1,2}h_{2}a'_{2,-1}h'_{1}\otimes a_{2,0}(h_{3}\to a'_{2,0})\otimes h_{4}h'_{2}.\end{align*}
+On the other hand, we compute:
+\begin{align*}
+\Delta & ((a\otimes h)(a'\otimes h'))\\
+ & =\sum\Delta(a(h_{1}\to a')\otimes h_{2}h')\\
+ & =\sum (a(h_{1}\to a'))_{1}\otimes(a(h_{1}\to a'))_{2,-1}(h_{2}h')_{1}\otimes(a(h_{1}\to a'))_{2,0}\otimes(h_{2}h')_{2}\\
+ & =\sum (a(h_{1}\to a'))_{1}\otimes(a(h_{1}\to a'))_{2,-1}h_{2}h'_{1}\otimes(a(h_{1}\to a'))_{2,0}\otimes h_{3}h'_{2}\\
+ & =\sum a_{1}(a_{2,-1}\to(h_{1}\to a')_{1})\otimes(a_{2,0}(h_{1}\to a')_{2})_{-1}h_{2}h'_{1}\otimes(a_{2,0}(h_{1}\to a')_{2})_{0}\otimes h_{2}h'_{2}\\
+ & =\sum a_{1}(a_{2,-1}\to(h_{1}\to a'_{1})\otimes(a_{2,0}(h_{2}\to a'_{2}))_{-1}h_{3}h'_{1}\otimes(a_{2,0}(h_{2}\to a'_{2}))_{0}\otimes h_{4}h'_{2}\\
+ & =\sum a_{1}(a_{2,-1}h_{1}\to a'_{1})\otimes a_{2,0,-1}(h_{2}\to a'_{2})_{-1}h_{3}h'_{1}\otimes a_{2,0,0}(h_{2}\to a'_{2})_{0}\otimes h_{4}h'_{2}\\
+ & =\sum a_{1}(a_{2,-1}h_{1}\to a'_{1})\otimes a_{2,0,-1}(h_{2}a'_{2,-1})h'_{1}\otimes a_{2,0,0}(h_{3}\to a'_{2,0})\otimes h_{4}h'_{2}\\
+ & =\sum a_{1}(a_{2,-1,1}h_{1}\to a'_{1})\otimes a_{2,-1,2}h_{2}a'_{2,-1}h'_{1}\otimes a_{2,0}(h_{3}\to a'_{2,0})\otimes h_{4}h'_{2}.
+\end{align*}
+Since $A$ is a left $H$-comodule-coalgebra and $a_{1,-1}a_{2,-1}\otimes a_{1,0}\otimes a_{2,0}=a_{-1}\otimes a_{0,1}\otimes a_{0,2}$,
+we obtain: 
+\begin{align*}
+S((a\otimes h)_{1})(a\otimes h)_{2} & =S(a_{1}\otimes a_{2,-1}h_{1})(a_{2,0}\otimes h_{2})\\
+ & =(1\otimes S_{H}(a_{1,-1}a_{2,-1}h_{1}))(S_{A}(a_{1,0})\otimes1)(a_{2,0}\otimes h_{2})\\
+ & =S_{A}(a_{1,0})a_{2,0}\otimes S_{H}(a_{1,-1}a_{2,-1}h_{1})h_{2}\\
+ & =\epsilon(a_{0})1\otimes S_{H}(a_{-1}h_{1})h_{2}\\
+ & =\epsilon(a)\epsilon(h)1\otimes1.
+\end{align*}
+Since $a_{-1}\otimes a_{0,-1}\otimes a_{0,0}=a_{-1,1}\otimes a_{-1,2}\otimes a_{0}$ we obtain:
+\begin{align*}
+(a\otimes h)_{1}S((a\otimes h)_{2}) & =(a_{1}\otimes a_{2,-1}h_{1})S(a_{2,0}\otimes h_{2})\\
+ & =(a_{1}\otimes a_{2,-1}h_{1})(1\otimes S_{H}(a_{2,0,-1}h_{2}))(S_{A}(a_{2,0,0})\otimes1)\\
+ & =a_{1}S_{A}(a_{2,0,0})\otimes a_{2,-1}h_{1}S_{H}(a_{2,0,-1}h_{2})\\
+ & =a_{1}S_{A}(a_{2,0,0})\otimes a_{2,-1}h_{1}S_{H}(h_{2})S_{H}(a_{2,0,-1})\\
+ & =a_{1}S_{A}(a_{2,0})\otimes a_{2,-1,1}S_{H}(a_{2,-1,2})\epsilon(h)\\
+ & =a_{1}S_{A}(a_{2})\otimes1\epsilon(h)\\
+ & =1\otimes1\epsilon(a)\epsilon(h).\qedhere
+ \end{align*}
+\end{proof}
+
+\begin{exercise}
+Prove that the Radford biproduct over $A\otimes H$ is commutative if and only
+if $A$ and $H$ are commutatives and the action $\to$ is trivial.  Similarly,
+the Radford biproduct over $A\otimes H$ is cocommutative if and only if $A$ and
+$H$ are cocommutative and the coaction $\delta_{A}$ is trivial.
+\end{exercise}
+
+\begin{exercise}
+Prove the converse of Theorem \ref{theorem:radford}: assume that $H$ is a
+bialgebra, $A$ is a left $H$-module-algebra and a left $H$-comodule coalgebra
+and the Radford biproduct $A\otimes H$ is a bialgebra. Then
+\eqref{eq:radford_1}--\eqref{eq:radford_6} are satisfied.
+\end{exercise}
+
+%\begin{exercise}
+%Let $(H,R)$ be a quasitriangular Hopf algebra, and let $B$ be a bialgebra in
+%the category $\H_\mathcal{M}$. Prove that $B$ is a left $H$-comodule-algebra via
+%$\delta(b)=R^{-1}(1\otimes b)$ and $B\otimes H$ with the Radford biproduct is a
+%bialgebra.  Furthermore, if $B$ is a triangular algebra then the biproduct is
+%quasitriangular.
+%\end{exercise}
+
+Similarly, it is possible to put on $H\otimes B$ a bialgebra structure, where
+the algebra structure is given by the smash product over $H\otimes B$ and the
+coalgebra is given by the smash coproduct over $H\otimes B$. For that purpose
+we need $B$ to be a right $H$-module-algebra and a right
+$H$-comodule-coalgebra. In this case, the necessary and sufficient conditions
+are:
+\begin{gather*}
+B\text{ is a right \ensuremath{H}-comodule-algebra,}\\
+B\text{ a right \ensuremath{H}-module-coalgebra,}\\
+\epsilon_{B}\text{ is a morphism of algebras,}\\
+\Delta(1_{B})=1_{B}\otimes1_{B},\\
+\Delta(bb')=b_{1}b'_{1,0}\otimes(b_{2}\leftarrow b'_{1,1})b'_{2},\\
+(b_{0}\leftarrow h_{1})\otimes b_{1}h_{2}=(b\leftarrow h_{2})_{0}\otimes h_{1}(b\leftarrow h_{2})_{1}.
+\end{gather*}
+
+A different and important bialgebra structure on $A\otimes H$ is
+the so-called \textbf{Majid product}. Let $A$ be an left $H$-module-algebra
+and $H$ be a right $A$-comodule-coalgebra. On the vector space $A\otimes H$
+we consider the algebra structure given by the smash product on $A\otimes H$ and the coalgebra
+structure given on $A\otimes H$, i.e.,
+\begin{align*}
+(a\otimes h)(a'\otimes h') & =a(h_{1}\rightarrow a')\otimes h_{2}h',\\
+\Delta(a\otimes h) & =a_{1}\otimes h_{1,0}\otimes a_{2}h_{1,1}\otimes h_{2}.\end{align*}
+Then $A\otimes H$ is a bialgebra if and only if \begin{gather*}
+\epsilon(h\rightarrow a)=\epsilon_{H}(h)\epsilon_{A}(a),\\
+\Delta(h\rightarrow a)=h_{1,0}\rightarrow a_{1}\otimes h_{1,1}(h_{2}\rightarrow a_{2}),\\
+\delta(1)=1\otimes1,\\
+\delta(hh')=h_{1,0}h'_{0}\otimes h_{1,1}(h_{2}\rightarrow h'_{1}),\\
+h_{2,0}\otimes(h_{1}\rightarrow a)h_{2,1}=h_{1,0}\otimes h_{1,1}(h_{2}\rightarrow a).
+\end{gather*}
+
+
+%\section{Radford bosonization}
+The following result is known as the Radford's bosonization. 
+
+\begin{theorem}[Radford]
+\label{theorem:bosonization}
+Let $H$ be a Hopf algebra with bijective antipode. There exists a bijective
+correspondence between
+\begin{enumerate}
+\item Hopf algebras $A$ with morphisms $H\xrightarrow{i}A\xrightarrow{p}H$
+such that $pi=\textrm{id}_{H}$.
+\item Hopf algebras in the category $_{H}^{H}\mathcal{YD}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Assume (1). We claim that 
+\[
+R=A^{\textrm{co}H}=\{a\in A\mid(\textrm{id}\otimes p)\Delta(a)=a\otimes1\}
+\]
+is a Hopf algebra in the category of left Yetter-Drinfeld modules.
+It is clear that $R$ is a subalgebra of $A$. Now define
+\begin{align*}
+\Delta_{R}(r) & =r_{1}iSp(r_{2})\otimes r_{3},\\
+S_{R}(r) & =ip(r_{1})S(r_{2}),\\
+h\to r & =i(h_{1})riS(h_{2}),\\
+\delta(r) & =(p\otimes\textrm{id})\Delta(r),
+\end{align*}
+for all $r\in R$ and $h\in H$. 
+We write $\Delta_{R}(r)=r^{1}\otimes r^{2}$ to distinguish $\Delta_{R}(r)$
+and $\Delta_{A}(r)=r_{1}\otimes r_{2}$. We claim that $\Delta_{R}$
+is coassociative:
+\begin{align*}
+(\textrm{id}\otimes\Delta_{R})\Delta_{R}(r) & =(\textrm{id}\otimes\Delta_{R})(r_{1}iSp(r_{2})\otimes r_{3})\\
+ & =r_{1}iSp(r_{2})\otimes r_{3,1}iSp(r_{3,2})\otimes r_{3,3}\\
+ & =r_{1}iSp(r_{2})\otimes r_{3}iSp(r_{4})\otimes r_{5}.
+ \end{align*}
+On the other hand:
+\begin{align*}
+(\Delta_{R}\otimes\textrm{id})\Delta_{R}(r) & =(\Delta_{R}\otimes\textrm{id})(r_{1}iSp(r_{2})\otimes r_{3})\\
+ & =\Delta_{R}(r_{1}iSp(r_{2}))\otimes r_{3}\\
+ & =[r_{1}iSp(r_{2})]_{1}iSp([r_{1}iSp(r_{2})]_{2})\otimes[r_{1}iSp(r_{2})]_{3}\otimes r_{3}\\
+ & =r_{1,1}[iSp(r_{2})]_{1}iSp(r_{1,2}[iS_{H}p(r_{2})]_{2})\otimes r_{1,3}[iSp(r_{2})]_{3}\otimes r_{3}\\
+ & =r_{1}iSp(r_{6})iSp(r_{2}iSp(r_{5}))\otimes r_{3}iSp(r_{4})\otimes r_{7}\\
+ & =r_{1}iS[p(r_{2})Sp(r_{5})r_{6}]\otimes r_{3}iSp(r_{4})\otimes r_{7}\\
+ & =r_{1}iSp(r_{2})\otimes r_{3}iSp(r_{4})\otimes r_{5}.\end{align*}
+Hence $R$ is an algebra and a coalgebra. 
+
+We claim that $R$ is a left $H$-comodule-algebra, since \[
+\delta(1)=(p\otimes\textrm{id})\Delta(1)=p(1)\otimes1=1\otimes1,\]
+and \[
+\delta(rr')=p(r_{1}r_{1}')\otimes r_{2}r'_{2}=p(r_{1})p(r'_{1})\otimes r_{2}r'_{2}=r_{-1}r'_{-1}\otimes r_{0}r'_{0}.\]
+
+We claim that $R$ if a left $H$-comodule-coalgebra, since \[
+r_{-1}\epsilon(r_{0})=p(r_{1})\epsilon(r_{2})=p(r_{1}\epsilon(r_{2}))=p(r)\]
+and since $r\in R$, \[
+\epsilon(r)=(\epsilon\otimes\textrm{id})(r\otimes1)=(\epsilon\otimes\textrm{id})(\textrm{id}\otimes p)\Delta(r)=\epsilon(r_{1})p(r_{2})=p(r).\]
+Futhermore, \begin{align*}
+(r^{1})_{-1}(r^{2})_{-1}\otimes(r^{1})_{0}\otimes(r^{2})_{0} & =p[(r_{1}iSpr_{2})_{1}r_{3,1}]\otimes(r_{1}iSp(r_{2}))_{2}\otimes r_{3,2}\\
+ & =p[r_{1,1}i(Spr_{2})_{1}r_{3,1}]\otimes r_{1,2}i(Spr_{2})_{2}\otimes r_{3,2}\\
+ & =p(r_{1}iSpr_{4}r_{5})\otimes r_{2}iSp(r_{3})\otimes r_{6}\\
+ & =p(r_{1})\otimes r_{2}iSpr_{3}\otimes r_{4}.\end{align*}
+and on the other hand,\begin{align*}
+r_{-1}\otimes(r_{0})^{1}\otimes(r_{0})^{2} & =r_{-1}\otimes\Delta_{R}(r_{0})\\
+ & =p(r_{1})\otimes\Delta_{R}(r_{2})\\
+ & =p(r_{1})\otimes r_{2}iSp(r_{3})\otimes r_{4}.
+\end{align*}
+We claim that $R$ is a left $H$-module-algebra, since 
+\[
+h\to1=ih_{1}iSh_{2}=i(h_{1}Sh_{2})=\epsilon(h)i(1)=\epsilon(h)1
+\]
+and 
+\begin{align*}
+(h_{1}\to r)(h_{2}\to r') & =ih_{1,1}riSh_{1,2}ih_{2,1}r'iSh_{2,2}\\
+ & =ih_{1}riSh_{2}ih_{3}r'iSh_{4}\\
+ & =ih_{1}r\epsilon(h_{2})r'iSh_{3}\\
+ & =ih_{1}rr'iSh_{2}\\
+ & =h\to(rr').
+\end{align*}
+We claim that $R$ is a left $H$-module-coalgebra, since 
+\begin{align*}
+\epsilon(h\to r)&=\epsilon(ih_{1}aiSh_{2})=\epsilon(ih_{1})\epsilon(r)\epsilon(iSh_{2})=\epsilon(h)\epsilon(r)
+\shortintertext{and} 
+\Delta_{R}(h\to r) & =\Delta_{R}(ih_{1}riSh_{2})\\
+ & =[ih_{1}riSh_{2}]_{1}iSp([ih_{1}riSh_{2}]_{2})\otimes[ih_{1}riSh_{2}]_{3}\\
+ & =ih_{1,1}r_{1}iS(h_{2})_{2}iSp(ih_{1,2}r_{2}iS(h_{2})_{2}\otimes ih_{1,3}r_{3}iS(h_{2})_{3}\\
+ & =ih_{1}r_{1}iSh_{6}iSp[ih_{2}r_{2}iSh_{5}]\otimes ih_{3}r_{3}iSh_{4}\\
+ & =ih_{1}r_{1}iSh_{6}iS[h_{2}pr_{2}Sh_{5}]\otimes ih_{3}r_{3}iSh_{4}\\
+ & =ih_{1}r_{1}iS[h_{2}pr_{2}Sh_{5}h_{6}]\otimes ih_{3}r_{3}iSh_{4}\\
+ & =ih_{1}r_{1}iS(h_{2}pr_{2})\epsilon(h_{5})\otimes ih_{3}r_{3}iSh_{4}\\
+ & =ih_{1}r_{1}iSpr_{2}Sh_{2}\otimes ih_{3}r_{3}iSh_{4}
+\shortintertext{and} 
+h_{1}\to r^{1}\otimes h_{2}\to r^{2} & = h_{1}\to r_{1}iSpr_{2}\otimes h_{2}\to r_{3}\\
+ & = ih_{1,1}r_{1}iSpr_{2}iSh_{1,2}\otimes ih_{2,1}r_{3}iSh_{2,2}\\
+ & = ih_{1}r_{1}iSpr_{2}iSh_{2}\otimes ih_{3}r_{3}iSh_{4}
+\end{align*}
+To prove that $R$ is a bialgebra in $_{H}^{H}\mathcal{YD}$ it remains
+to prove that $\Delta_{R}$ is a morphism in $_{H}^{H}\mathcal{YD}$.
+We compute: 
+\begin{align*}
+\Delta_{R}(rr') & = (rr')_{1}iSp((rr')_{2})\otimes(rr')_{3}\\
+ & = r_{1}r'_{1}iSp(r_{2}r'_{2})\otimes r_{3}r'_{3}\\
+ & = r_{1}r'_{1}iSp(r'_{2})iSp(r_{2})\otimes r_{3}r'_{3}.
+\end{align*}
+On the other hand,
+\begin{align*}
+r^{1}((r^{2})_{-1}\to r'^{1})\otimes(r^{2})_{0}r'^{2} &=r_{1}iSp(r_{2})(r_{3,-1}\to(r'_{1}iSp(r'_{2}))\otimes r_{3,0}r'_{3}\\
+ &=r_{1}iSp(r_{2})(p(r_{3,1})\to r'_{1}iSp(r'_{2}))\otimes r_{3,2}r'_{3}\\
+ &=r_{1}iSp(r_{2})i(p(r_{3})_{1})r'_{1}iSp(r'_{2})iS(p(r_{2})_{2})\otimes r_{4}r'_{3}\\
+ &=r_{1}i[Sp(r_{2})p(r_{3})]r'_{1}iS[p(r'_{2})iSp(r_{4})]\otimes r_{5}r'_{3}\\
+ &=r_{1}\epsilon(r_{2})r'_{1}iSp(r'_{2})iSp(r_{3})\otimes r_{4}r'_{3}\\
+ &=r_{1}r'_{1}iSp(r'_{2})iSp(r_{2})\otimes r_{3}r'_{3}.
+\end{align*}
+
+Conversely, let $R$ be a Hopf algebra in the category of Yetter-Drinfeld
+modules. Then the Radford biproduct $R\otimes H$ is a Hopf algebra by Theorem
+\ref{theorem:radford}. The maps $p:R\otimes H\to H$, defined by $r\otimes
+h\mapsto\epsilon(r)h$, and $i:H\to R\otimes H$, defined by $h\mapsto
+1\otimes h$ are Hopf algebra morphisms and $p\circ i=\id$. 
+%Furthermore,
+%\[
+%R\otimes1=\{a\in R\otimes H\mid (\id\otimes p)\Delta(a)=a\otimes1\}.
+%\]
+%Now the claim follows from the following exercise.
+\end{proof}
+
+\begin{exercise}
+Let $A$ and $H$ be two Hopf algebras such that there exist Hopf algebras
+morphisms $H\xrightarrow{i}A\xrightarrow{p}H$ such that $pi=\id_H$. Let
+$R=A^{\mathrm{co}H}$ and consider the map $\omega:A\to R$ defined by $a\mapsto
+a_1ip(Sa_2)$. 
+\begin{enumerate}
+    \item Prove that the maps $\alpha:A\to R\otimes H$, $\alpha(a)=\omega(a_1)\otimes p(a_2)$, and 
+    $\beta:R\otimes H\to A$, $r\otimes h\mapsto ri(h)$     
+    are Hopf algebra homomorphisms. 
+    \item Prove that $\alpha\circ\beta=\id_{R\otimes H}$ and $\beta\circ\alpha=\id_A$ and 
+    conclude that $A\simeq R\otimes H$ as Hopf algebras.
+\end{enumerate}
+\end{exercise}
+
+
+\newpage 
+
+\bibliographystyle{abbrv}
+\bibliography{refs}
+
+\printindex
+
+
+\end{document}
