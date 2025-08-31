@@ -118,7 +118,7 @@ respectively.
 
 \begin{exercise}
     \label{xca:algebra_diagrams}
-    Formulate the definitions of commutativity and algebra homomorphisms using commutative diagrams.
+    Formulate the definitions of commutativity and algebra homomorphism using commutative diagrams.
 \end{exercise}
 
 \section{Coalgebras}
@@ -281,7 +281,7 @@ Although the above notation may look unusual, it provides a very convenient way 
 
 \begin{exercise}
 \label{xca:Hopf}
-    Reformulate the definition of a Hopf algebra in Sweedler’s notation.
+    Reformulate the definition of a coalgebra in Sweedler’s notation.
 \end{exercise}
 
 \begin{exercise}
@@ -320,14 +320,15 @@ map $T^*\colon W^*\to V^*$, $f\mapsto T^*(f)$, where
 \]
 
 \begin{example}
-\index{Dual!of a coalgebra}
+\index{Dual!algebra of a coalgebra}
 \label{exa:dual_coalgebra}
     Let $C$ be a coalgebra. The dual 
     $C^*=\Hom(C,K)$ is an algebra
     with multiplication 
     $m(f\otimes g)(c)=\sum f(c_1)g(c_2)$ 
     and unit $u(f)(c)=f(c)$. A direct calculation 
-    shows that if $C$ is cocommutative, then $C^*$ is commutative. 
+    shows that if $C$ is cocommutative, then $C^*$ is commutative. The algebra $C^*$ is called the
+    \emph{dual algebra} of $C$. 
 \end{example}
 
 In Example~\ref{exa:dual_coalgebra} we use 
@@ -341,13 +342,14 @@ for $f,g\in C^*$ and $x,y\in C$.
 
 
 \begin{example}
-\index{Dual!of an algebra}
+\index{Dual!coalgebra of an algebra}
 \label{exa:dual_algebra}
     Let $A$ be a finite-dimensional algebra. Then $A^*$ is 
     a coalgebra with multiplication 
     $\Delta(f)(a\otimes b)=f(ab)$ and counit 
     $\epsilon(f)(a)=\epsilon(a)$. A direct calculation shows that 
-    if $A$ is commutative, then $A^*$ is cocommutative. 
+    if $A$ is commutative, then $A^*$ is cocommutative. The  
+    coalgebra $A^*$ is called the \emph{dual coalgebra} of $A$. 
 \end{example}
 
 Why we need finite-dimensional algebras in Example~\ref{exa:dual_algebra}? 
@@ -565,7 +567,7 @@ Prove that the sum of comodules is a comodule.
     \label{xca:1.6.4b}
     Let $A$ be a finite-dimensional algebra. Prove that 
     if $M$ is a left $A$-module, then 
-    $M$ is a right $A^*$-module. 
+    $M$ is a right $A^*$-comodule. 
 \end{exercise}
 
 % Let $m\in M$ and $\{m_1,\dots,m_k\}$ be a basis of $A\cdot m$. 
@@ -1131,6 +1133,27 @@ U^\perp=\{v\in V:\alpha(v)=0\text{ for all $\alpha\in U$}\}.
 Then $U\subseteq U^{\perp\perp}$. Note that
 if $\dim V=\infty$, it can happen that $U\subsetneq U^{\perp\perp}$. 
 
+\begin{exercise}
+\label{xca:dual}
+    Let $C$ be a coalgebra. 
+    \begin{enumerate}
+        \item Let $U$, $V$ and $W$ be subspaces of $C$ such that 
+    $\Delta(U)\subseteq V\otimes C+C\otimes W$. Prove that 
+    $V^\perp W^\perp\subseteq U^\perp$. 
+    \item Let $I$, $J$ and $K$ be subspaces of $C^*$ 
+    such that $IJ\subseteq K$. Prove that 
+    \[
+    \Delta(K^\perp)\subseteq I^\perp\otimes C+C\otimes J^\perp.
+    \]
+    \end{enumerate}
+\end{exercise}
+
+% \begin{exercise}
+%     Let $C$ be a coalgebra. Let $I$, $J$ and $K$ be subspaces of $C^*$ 
+%     such that $IJ\subseteq K$. Prove that 
+%     $\Delta(K^\perp)\subseteq I^\perp\otimes C+C\otimes J^\perp$. 
+% \end{exercise}
+
 \begin{definition}
     \index{Coideal}
     Let $C$ be a coalgebra. A \emph{left coideal} of $C$ 
@@ -1143,7 +1166,7 @@ $D$ of $C$ such that $\Delta(D)\subseteq D\otimes C$.
 
 \begin{lemma}
 \label{lem:correspondence}
-    Let $C$ be a coalgebra. 
+    Let $C$ be a finite-dimensional coalgebra. 
     \begin{enumerate}
         \item $D$ is a left (right) coideal of $C$ 
         if and only if $D^\perp$ is a left  (right)
@@ -1151,8 +1174,8 @@ $D$ of $C$ such that $\Delta(D)\subseteq D\otimes C$.
         %\item $D$ is a right coideal of $C$ 
         %if and only if $D^\perp$ is a right  
         %ideal of $C^*$. 
-        \item If $I$ is left ideal of $C^*$, then 
-        $I^\perp$ is a left coideal of $C$. The converse holds if $C$ is infinite-dimensional.
+        \item $I$ is left (right) ideal of $C^*$ if and only  
+        $I^\perp$ is a left (right) coideal of $C$.
         %$\dim C<\infty$. 
         % \item If $I$ is right ideal of $C^*$, then 
         % $I^\perp$ is a right coideal of $C$. The converse holds if $\dim C<\infty$. 
@@ -1161,33 +1184,30 @@ $D$ of $C$ such that $\Delta(D)\subseteq D\otimes C$.
     \end{enumerate}
 \end{lemma}
 
-\begin{proof}
+\begin{proof}[Sketch of the proof]
     The proofs of the corresponding results for right objects are similar and are omitted here.
     \begin{enumerate}
-        \item Assume that $D$ is a left coideal of $C$. Then  
-        $\Delta(D)\subseteq C\otimes D$. Let $\alpha\in C^*$, $\beta\in D^\perp$ and $x\in D$. We want to show that
-        $C^*D^\perp\subseteq D^\perp$. We compute 
-        \[
-        (\alpha\beta)(x)=(\alpha\otimes\beta)(\Delta(x))
-        =\sum\alpha(x_1)\beta(x_2)\in \alpha(C)\beta(D)=0.
-        \]
-        The converse will follow from (2), as... 
+        \item If we assume that $D$ is a left coideal of $C$, then the result 
+            follows from Exercise~\ref{xca:dual}(1). The converse follows from (2). 
+        % Assume that $D$ is a left coideal of $C$. Then  
+        % $\Delta(D)\subseteq C\otimes D$. Let $\alpha\in C^*$, $\beta\in D^\perp$ and $x\in D$. We want to show that
+        % $C^*D^\perp\subseteq D^\perp$. We compute 
+        % \[
+        % (\alpha\beta)(x)=(\alpha\otimes\beta)(\Delta(x))
+        % =\sum\alpha(x_1)\beta(x_2)\in \alpha(C)\beta(D)=0.
+        % \]
+        % The converse will follow from (2), as... 
 
-        \item Let $I$ be a left ideal of $C^*$. 
-        $C$ is a left $C^*$-comodule with 
-        \[
-        f\rightharpoonup x=\sum\langle f,x_2\rangle x_1.
-        \]
-        Moreover, $I^\perp$ is a left $C^*$-module, as 
-        if $f\in C^*$ and $x\in C$, 
-        \[
-        \langle I,r\rightharpoonup x\rangle
-        =\langle I,\sum f(x_2)x_1\rangle 
-        =\langle f(x_2)...
-        \]
-        \item If $D$ is a subcoalgebra, then $D$ is both left and right coideal and the claim follows from (1) and (2). Conversely...
+        \item If we assume that $I$ is a left ideal of $C^*$, the claim 
+        follows from Exercise~\ref{xca:dual}(2). For the converse, note
+        that $I^{\perp\perp}=I$ and use (1). 
+        \item Note that $D$ is a subcoalgebra if and only if 
+        $D$ is both left and right coideal. Thus the claim follows from (1) and (2).\qedhere 
     \end{enumerate}
 \end{proof}
+
+Note that the finite-dimensionality assumption in Lemma~\ref{lem:correspondence} 
+is only used in one of the implications of the second item. 
 
 \begin{theorem}
     Any cocommutative complex coalgebra is pointed.  
@@ -1231,8 +1251,9 @@ of group-like elements.
 % molnar paper 
 %\index{Smash product}
 The Hopf algebra of Exercise~\ref{xca:smash} is 
-called the \emph{smash product} of $\mathcal{U}(\mathfrak{g})$ and $\C[G]$
-and is denoted by $\mathcal{U}(\mathfrak{g})\rtimes\C[G]$. 
+the \emph{smash product} of 
+$\mathcal{U}(\mathfrak{g})$ and $\C[G]$
+and is denoted by $\mathcal{U}(\mathfrak{g})\rtimes\C[G]$; see Exercise\framebox{?}.%~\ref{xca:}. 
 
 % Cartier 4.5.1
 \begin{theorem}[Cartier--Gabriel--Kostant]
