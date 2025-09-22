@@ -263,7 +263,7 @@ Write
 % \Delta(\id\otimes\Delta)(c)=\Delta(\Delta\otimes\id)(c)
 % =\sum c_{(1)}\otimes c_{2}\otimes c_{3}. 
 % \]
-Thanks to the coassociativty, we can write 
+Thanks to the coassociativity, we can write 
 \[
 \sum c_{1}\otimes c_{2}\otimes c_{3}
 =\sum c_1\otimes c_{2,1}\otimes c_{2,2}
@@ -352,7 +352,7 @@ for $f,g\in C^*$ and $x,y\in C$.
     coalgebra $A^*$ is called the \emph{dual coalgebra} of $A$. 
 \end{example}
 
-Why we need finite-dimensional algebras in Example~\ref{exa:dual_algebra}? 
+Why do we need finite-dimensional algebras in Example~\ref{exa:dual_algebra}? 
 
 \subsection{Group-like and primitive elements}
 
@@ -531,7 +531,7 @@ We write
         \sum m_0\otimes m_{1,1}\otimes m_{1,2}
         =\sum m_{0,0}\otimes m_{0,1}\otimes m_1
     \end{align*}
-    for all $m\in M$. The second diagrams says that 
+    for all $m\in M$. The second diagram says that 
     $\sum m_0\epsilon(m_1)=m$ for all $m\in M$. 
     
 Note that Sweedler's notation for left and right comodules is compatible with the notation we introduced before for coalgebras. This is fantastic!
@@ -655,7 +655,7 @@ Theorem~\ref{thm:fundamental} immediately implies that every simple coalgebra is
 
 \begin{exercise}
 \label{xca:bialgebra}
-    Let $B$ that is both an algebra and a coalgebra. Prove that 
+    Let $B$ be both an algebra and a coalgebra. Prove that 
     $B$ is a bialgebra if and only if 
     multiplication and the unit are coalgebra homomorphisms. 
 \end{exercise}
@@ -915,7 +915,7 @@ The following exercise introduces the
 \begin{exercise}
 \label{xca:left_smash}
 \index{Smash!product}
-Let $H$ be a bialgebra and $(A,\rightarrow)$ be an left $H$-module-algebra.
+Let $H$ be a bialgebra and $(A,\rightarrow)$ be a left $H$-module-algebra.
 Prove that there exists an algebra structure on $A\otimes H$ given by
 \[
 (a\otimes h)(b\otimes g)=\sum a(h_{1}\rightarrow b)\otimes h_{2}g
@@ -1031,7 +1031,7 @@ $h,g\in H$.
 
 \begin{definition}
 \index{Comodule!algebra}
-Let $H$ be a Hopf algebra. An algebra $A$ is a said to be a left
+Let $H$ be a Hopf algebra. An algebra $A$ is said to be a left
 \emph{$H$-comodule-algebra} if $A$ is a left $H$-comodule such that 
 \begin{align*}
 \sum (1_A)_{-1}\otimes (1_A)_0 =\sum 1_{H}\otimes1_{A},
@@ -1223,7 +1223,7 @@ is only used in one of the implications of the second item.
 \section{The Cartier--Gabriel--Kostant theorem}
 
 We first describe 
-the semi direct product (or smash product) 
+the semi-direct product (or smash product) 
 of Hopf algebras. 
 
 % Maybe better here the full smash product of Molnar
@@ -1349,7 +1349,7 @@ for all objects $U,W$ of $\mathcal{C}$.
 \begin{definition}
 \index{Monoidal category!strict}
 A monoidal category $\mathcal{C}$ is called \emph{strict} if the natural
-isomorphism $a$, $l$ y $r$ are identities. 
+isomorphisms $a$, $l$ and $r$ are identities. 
 \end{definition}
 
 Without loss of generality, we may assume that our monoidal categories are strict. Thanks to 
@@ -1546,10 +1546,10 @@ m_{A\otimes B}=(m_A\otimes m_B)(\id_A\otimes c_{B,A}\otimes \id_B).
 \end{example}
 
 \subsection{Coalgebras in categories}
-Similarly ones defines coalgebras in categories.
+Similarly one defines coalgebras in categories.
 
 \begin{definition}
-\index{Coalgebra!in a monoidal categorie}
+\index{Coalgebra!in a monoidal category}
 Let $\mathcal{C}$ be a monoidal category. A \emph{coalgebra}
 in $\mathcal{C}$ is a triple $(C,\Delta,\epsilon)$, where
 $C$ is an object of $\mathcal{C}$, $\Delta\in\Hom(C,C\otimes C)$
@@ -1600,7 +1600,7 @@ with comultiplication
 \end{example}
 
 \begin{definition}
-\index{Bialgebra!in a braided categorie}
+\index{Bialgebra!in a braided category}
 Let $\mathcal{C}$ be a braided monoidal category with braiding $c$.
 A \emph{bialgebra} in $\mathcal{C}$ is a tuple $(B,m,\eta,\Delta,\epsilon)$,
 where $(B,m,\eta)$ is an algebra in $\mathcal{C}$, $(B,\Delta,\epsilon)$
@@ -1985,7 +1985,7 @@ $f=c_{U,V}\otimes\id_W$ and $g=\id_W$ and Exercise~\ref{xca:YD_hexagons}.
 
 \begin{theorem}[Radford]
 \label{theorem:radford}
-Let $H$ be Hopf algebra, and let $A$ be an algebra and a coalgebra such that
+Let $H$ be a Hopf algebra, and let $A$ be an algebra and a coalgebra such that
 $(A,\rightarrow)$ a left $H$-module-algebra and $(A,\delta)$ a left
 $H$-comodule-coalgebra.  Assume that 
 \begin{gather}
@@ -2062,7 +2062,7 @@ Since $a_{-1}\otimes a_{0,-1}\otimes a_{0,0}=a_{-1,1}\otimes a_{-1,2}\otimes a_{
 
 \begin{exercise}
 Prove that the Radford biproduct over $A\otimes H$ is commutative if and only
-if $A$ and $H$ are commutatives and the action $\to$ is trivial.  Similarly,
+if $A$ and $H$ are commutative and the action $\to$ is trivial.  Similarly,
 the Radford biproduct over $A\otimes H$ is cocommutative if and only if $A$ and
 $H$ are cocommutative and the coaction $\delta_{A}$ is trivial.
 \end{exercise}
@@ -2240,7 +2240,7 @@ h\mapsto\epsilon(r)h$, and $i:H\to R\otimes H$, defined by $h\mapsto
 \end{proof}
 
 \begin{exercise}
-Let $A$ and $H$ be two Hopf algebras such that there exist Hopf algebras
+Let $A$ and $H$ be two Hopf algebras such that there exist Hopf algebra
 morphisms $H\xrightarrow{i}A\xrightarrow{p}H$ such that $pi=\id_H$. Let
 $R=A^{\mathrm{co}H}$ and consider the map $\omega:A\to R$ defined by $a\mapsto
 a_1ip(Sa_2)$. 
